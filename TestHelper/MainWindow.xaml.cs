@@ -32,5 +32,10 @@ namespace TestHelper
         {
 
         }
+
+        private void TabItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Loaded");
+        }
     }
 }

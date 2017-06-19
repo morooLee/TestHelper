@@ -13,7 +13,7 @@
             <RowDefinition Height="22"></RowDefinition>
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0" TabStripPlacement="Left">
-            <TabItem Header="Inspection" ToolTip="점검">
+            <TabItem Header="Inspection" ToolTip="점검" Loaded="TabItem_Loaded">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="22"></RowDefinition>
@@ -54,7 +54,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Appsn" ToolTip="게임코드(페이지코드)">
+            <TabItem Header="GNB" ToolTip="GNB 적용 여부">
 
             </TabItem>
         </TabControl>
