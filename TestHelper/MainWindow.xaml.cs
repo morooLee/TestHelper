@@ -19,7 +19,7 @@ using TestHelper.Controllers;
 using TestHelper.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
-
+using TestHelper.Windows.Inspection;
 
 namespace TestHelper
 {
@@ -54,7 +54,6 @@ namespace TestHelper
         {
             ListView listView = sender as ListView;
             InspectionPageInfo item = listView.SelectedItem as InspectionPageInfo;
-            Url_TextBlock.Text = item.Url;
             Inspection_WebBrowser.Source = new Uri(item.Url);
         }
 
@@ -63,17 +62,57 @@ namespace TestHelper
             try
             {
                 var doc = (Inspection_WebBrowser.Document as mshtml.HTMLDocument).getElementById("InspectionTime");
-                Date_TextBlock.Text = doc.innerText;
-                InspectionPageInfo item = InspectionPageInfoList_ListView.SelectedItem as InspectionPageInfo;
-                if (item != null)
+
+                if (doc == null)
                 {
-                    item.InspectionDate = doc.innerText;
+                    Date_TextBlock.Text = "점검시간 : ";
                 }
+                else
+                {
+                    Date_TextBlock.Text = "점검시간 : " + doc.innerText;
+                    InspectionPageInfo item = InspectionPageInfoList_ListView.SelectedItem as InspectionPageInfo;
+
+                    if (item != null)
+                    {
+                        item.InspectionDate = doc.innerText;
+                    }
+                }
+
+                StatusBarItemChange(Inspection_WebBrowser.Source);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void StatusBarItemChange(object obj)
+        {
+            if (statusBar.HasItems)
+            {
+                statusBar.Items.RemoveAt(0);
+            }
+            statusBar.Items.Add(obj);
+        }
+
+        private void Refresh_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Inspection_WebBrowser.Refresh();
+        }
+
+        private void InspectionPageInfoList_ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ListView listView = sender as ListView;
+            InspectionPageInfo item = listView.SelectedItem as InspectionPageInfo;
+            InspectionDetailWindow subWindow = new InspectionDetailWindow(item);
+            subWindow.Owner = Application.Current.MainWindow;
+            subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            subWindow.ShowDialog();
+        }
+
+        private void TabItem_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

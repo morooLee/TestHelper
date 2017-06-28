@@ -13,39 +13,39 @@
             <RowDefinition Height="22"></RowDefinition>
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0" TabStripPlacement="Left">
-            <TabItem Header="Inspection" ToolTip="점검">
+            <TabItem Header="Inspection" ToolTip="점검" Loaded="TabItem_Loaded">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     
-                    <Grid Grid.Row="1" >
-                        <Grid.Resources>
+                    <DockPanel Grid.Row="1" >
+                        <DockPanel.Resources>
                             <model:InspectionPageInfoList x:Key="InspectionListKey" />
-                        </Grid.Resources>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="187"></ColumnDefinition>
+                        </DockPanel.Resources>
+                        <!--<Grid.ColumnDefinitions>
+                            <ColumnDefinition Width=""></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <ListView Grid.Column="0" Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged">
+                        </Grid.ColumnDefinitions>-->
+                        <ListView DockPanel.Dock="Left" Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" MouseDoubleClick="InspectionPageInfoList_ListView_MouseDoubleClick">
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
                                     <GridViewColumn DisplayMemberBinding="{Binding Path=PageName}" Header="Page" />
-                                    <GridViewColumn DisplayMemberBinding="{Binding Path=InspectionDate}" Header="Date" Width="80" />
+                                    <!--<GridViewColumn DisplayMemberBinding="{Binding Path=InspectionDate}" Header="Date" Width="80" />-->
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <Grid Grid.Column="1">
+                        <Grid Grid.Column="1" DockPanel.Dock="Top">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="23"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
                             <DockPanel Grid.Row="0">
                                 <Border DockPanel.Dock="Bottom" BorderThickness="0.5" BorderBrush="#FFACACAC"></Border>
-                                <TextBlock Name="Url_TextBlock" DockPanel.Dock="Left" Margin="10,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock Name="Date_TextBlock" DockPanel.Dock="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold" />
                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                                    <Button Height="22" Width="22" ToolTip="새로고침" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}">
+                                    <Button Height="22" Width="22" ToolTip="새로고침" Name="Refresh_Button" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" Click="Refresh_Button_Click">
                                         <Image Source="Resources/Refresh_grey.ico" />
                                     </Button>
                                     <Button Height="22" Width="22" ToolTip="설정" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}">
@@ -53,10 +53,9 @@
                                     </Button>
                                 </StackPanel>
                             </DockPanel>
-                            <TextBlock Name="Date_TextBlock" Grid.Row="1" VerticalAlignment="Top" FontSize="20" FontWeight="Bold" Panel.ZIndex="1"/>
                             <WebBrowser Name="Inspection_WebBrowser" Grid.Row="1" LoadCompleted="Inspection_WebBrowser_LoadCompleted" />
                         </Grid>
-                    </Grid>
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="GNB" ToolTip="GNB 적용 여부">
