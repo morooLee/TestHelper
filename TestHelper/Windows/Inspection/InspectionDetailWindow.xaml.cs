@@ -44,5 +44,10 @@ namespace TestHelper.Windows.Inspection
             URL_TextBox.Text = item.Url;
             Date_TextBox.Text = item.InspectionDate;
         }
+
+        private void Apply_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

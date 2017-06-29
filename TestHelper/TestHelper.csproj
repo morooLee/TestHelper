@@ -85,6 +85,9 @@
     <Compile Include="Windows\Inspection\InspectionDetailWindow.xaml.cs">
       <DependentUpon>InspectionDetailWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Inspection\InspectionSettingWindow.xaml.cs">
+      <DependentUpon>InspectionSettingWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -100,6 +103,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Windows\Inspection\InspectionDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Inspection\InspectionSettingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -155,6 +162,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Upload_gray.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Download_grey.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

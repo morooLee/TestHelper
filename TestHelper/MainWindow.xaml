@@ -9,10 +9,35 @@
         Title="Moroo | TestHelper" Height="600" Width="900" Icon="Resources/Sign_Icon.ico" Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="23"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="22"></RowDefinition>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0" TabStripPlacement="Left">
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="70"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Menu Grid.Column="0">
+                
+            </Menu>
+            <Menu Grid.Column="1" HorizontalAlignment="Right">
+            <MenuItem Click="Refresh_Menu_Click">
+                <MenuItem.Header>
+                    <Image Source="Resources/Refresh_grey.ico" Name="Refresh_Button" Margin="2" ToolTip="새로고침" />
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Click="Setting_Menu_Click">
+                <MenuItem.Header>
+                    <!--<Button Height="22" Width="22" ToolTip="설정" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <Image Source="Resources/Settings.ico" />
+                    </Button>-->
+                    <Image Source="Resources/Settings.ico" Name="Setting_Button" Margin="2" ToolTip="설정" />
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+        </Grid>
+        <TabControl Grid.Row="1" Name="Tab_Control" TabStripPlacement="Left">
             <TabItem Header="Inspection" ToolTip="점검" Loaded="TabItem_Loaded">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -23,12 +48,15 @@
                     <DockPanel Grid.Row="1" >
                         <DockPanel.Resources>
                             <model:InspectionPageInfoList x:Key="InspectionListKey" />
+                            <Style x:Key="ListViewStyle" TargetType="{x:Type ListViewItem}">
+                                <EventSetter Event="MouseDoubleClick" Handler="InspectionPageInfoList_ListView_MouseDoubleClick" />
+                            </Style>
                         </DockPanel.Resources>
                         <!--<Grid.ColumnDefinitions>
                             <ColumnDefinition Width=""></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>-->
-                        <ListView DockPanel.Dock="Left" Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" MouseDoubleClick="InspectionPageInfoList_ListView_MouseDoubleClick">
+                        <ListView DockPanel.Dock="Left" Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" >
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
                                     <GridViewColumn DisplayMemberBinding="{Binding Path=PageName}" Header="Page" />
@@ -44,14 +72,14 @@
                             <DockPanel Grid.Row="0">
                                 <Border DockPanel.Dock="Bottom" BorderThickness="0.5" BorderBrush="#FFACACAC"></Border>
                                 <TextBlock Name="Date_TextBlock" DockPanel.Dock="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold" />
-                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                                <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
                                     <Button Height="22" Width="22" ToolTip="새로고침" Name="Refresh_Button" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" Click="Refresh_Button_Click">
                                         <Image Source="Resources/Refresh_grey.ico" />
                                     </Button>
                                     <Button Height="22" Width="22" ToolTip="설정" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}">
                                         <Image Source="Resources/Settings.ico" />
                                     </Button>
-                                </StackPanel>
+                                </StackPanel>-->
                             </DockPanel>
                             <WebBrowser Name="Inspection_WebBrowser" Grid.Row="1" LoadCompleted="Inspection_WebBrowser_LoadCompleted" />
                         </Grid>
@@ -62,6 +90,6 @@
 
             </TabItem>
         </TabControl>
-        <StatusBar Grid.Row="1" Name="statusBar" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
+        <StatusBar Grid.Row="2" Name="statusBar" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
     </Grid>
 </Window>

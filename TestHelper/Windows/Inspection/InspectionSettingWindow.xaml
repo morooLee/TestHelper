@@ -1,0 +1,52 @@
+﻿<Window x:Class="TestHelper.Windows.Inspection.InspectionSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestHelper.Windows.Inspection"
+        xmlns:model="clr-namespace:TestHelper.Models"
+        mc:Ignorable="d"
+        Title="InspectionSettingWindow" Height="300" Width="500" Icon="/TestHelper;component/Resources/Sign_Icon.ico" ShowInTaskbar="False" ResizeMode="CanResize" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.Resources>
+            <model:InspectionPageInfoList x:Key="InspectionListKey" />
+            <Style x:Key="ListViewStyle" TargetType="{x:Type ListViewItem}">
+                <EventSetter Event="MouseDoubleClick" Handler="InspectionPageInfoList_ListView_MouseDoubleClick" />
+            </Style>
+        </Grid.Resources>
+        <DockPanel Margin="5">
+            <DockPanel DockPanel.Dock="Bottom" Height="50" VerticalAlignment="Bottom">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <!--<Button Height="22" Width="22" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <Image Source="/TestHelper;component/Resources/Upload_gray.ico"/>
+                    </Button>
+                    <Button Height="22" Width="22" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <Image Source="/TestHelper;component/Resources/Download_grey.ico"/>
+                    </Button>-->
+                    <Button Height="22" Content="적용"/>
+                    <StackPanel Width="10" />
+                    <Button Height="22" Content="취소"/>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <!--<Button Height="22" Width="22" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <Image Source="/TestHelper;component/Resources/Upload_gray.ico"/>
+                    </Button>
+                    <Button Height="22" Width="22" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <Image Source="/TestHelper;component/Resources/Download_grey.ico"/>
+                    </Button>-->
+                    <Button Height="22" Content="위로"/>
+                    <StackPanel Width="10" />
+                    <Button Height="22" Content="아래로"/>
+                </StackPanel>
+            </DockPanel>
+            <ListView Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" >
+                <ListView.View>
+                    <GridView AllowsColumnReorder="True">
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=PageName}" Header="Page" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Url}" Header="Url" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
+    </Grid>
+</Window>

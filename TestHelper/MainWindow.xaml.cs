@@ -95,24 +95,49 @@ namespace TestHelper
             statusBar.Items.Add(obj);
         }
 
-        private void Refresh_Button_Click(object sender, RoutedEventArgs e)
+        private void Refresh_Menu_Click(object sender, RoutedEventArgs e)
         {
-            Inspection_WebBrowser.Refresh();
+            switch(Tab_Control.SelectedIndex)
+            {
+                case 0:
+                    {
+                        Inspection_WebBrowser.Refresh();
+                        break;
+                    }
+            }
         }
 
         private void InspectionPageInfoList_ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ListView listView = sender as ListView;
-            InspectionPageInfo item = listView.SelectedItem as InspectionPageInfo;
-            InspectionDetailWindow subWindow = new InspectionDetailWindow(item);
-            subWindow.Owner = Application.Current.MainWindow;
-            subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            subWindow.ShowDialog();
+            ListViewItem listViewItem = sender as ListViewItem;
+            if (listViewItem.IsSelected)
+            {
+                InspectionPageInfo item = listViewItem.DataContext as InspectionPageInfo;
+                InspectionDetailWindow subWindow = new InspectionDetailWindow(item);
+                subWindow.Owner = Application.Current.MainWindow;
+                subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                subWindow.ShowDialog();
+            }
         }
 
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Setting_Menu_Click(object sender, RoutedEventArgs e)
+        {
+            switch (Tab_Control.SelectedIndex)
+            {
+                case 0:
+                    {
+                        InspectionSettingWindow subWindow = new InspectionSettingWindow();
+                        subWindow.Owner = Application.Current.MainWindow;
+                        subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                        subWindow.ShowDialog();
+                        break;
+                    }
+            }
         }
     }
 }
