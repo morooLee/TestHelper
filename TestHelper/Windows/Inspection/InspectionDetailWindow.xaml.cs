@@ -20,34 +20,101 @@ namespace TestHelper.Windows.Inspection
     /// </summary>
     public partial class InspectionDetailWindow : Window
     {
-        InspectionPageInfo inspectionPageInfo;
+        InspectionPageInfo inspectionPageInfo = new InspectionPageInfo();
+        bool isEdited = false;
 
-        public InspectionDetailWindow(InspectionPageInfo item)
+        public InspectionDetailWindow(InspectionPageInfo item, bool isEdited)
         {
+            this.isEdited = isEdited;
+
             if (item != null)
             {
                 inspectionPageInfo = item;
             }
+
             InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             DataUpdate(inspectionPageInfo);
+
+            if (isEdited)
+            {
+                Button btn = new Button();
+                btn.Name = "Cancel_Button";
+                btn.Margin = new Thickness(10, 0, 0, 0);
+                btn.Content = "취소";
+                btn.Click += new RoutedEventHandler(Cancel_Button_Click);
+                Buttons_StackPanel.Children.Add(btn);
+            }
         }
 
         public void DataUpdate(InspectionPageInfo item)
         {
-            inspectionPageInfo = item;
+            if (item != null)
+            {
+                inspectionPageInfo = item;
 
-            PageName_TextBox.Text = item.PageName;
-            URL_TextBox.Text = item.Url;
-            Date_TextBox.Text = item.InspectionDate;
+                PageName_TextBox.Text = item.PageName;
+                URL_TextBox.Text = item.Url;
+                Date_TextBox.Text = item.InspectionDate;
+            }
+            
+            if (isEdited)
+            {
+                PageName_TextBox.IsReadOnly = false;
+                URL_TextBox.IsReadOnly = false;
+                Date_TextBox.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Apply_Button_Click(object sender, RoutedEventArgs e)
         {
+            if (isEdited)
+            {
+                if (PageName_TextBox.Text == string.Empty || URL_TextBox.Text == string.Empty)
+                {
+                    MessageBox.Show("페이지명 또는 URL을 입력하세요.", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    inspectionPageInfo.PageName = PageName_TextBox.Text;
+                    inspectionPageInfo.Url = URL_TextBox.Text;
+                    isEdited = false;
+
+                    Close();
+                }
+            }
+        }
+
+        private void Cancel_Button_Click(object sender, RoutedEventArgs e)
+        {
             Close();
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            if (isEdited)
+            {
+                e.Cancel = true;
+
+                if (PageName_TextBox.Text != string.Empty || URL_TextBox.Text != string.Empty)
+                {
+                    MessageBoxResult result = MessageBox.Show("취소하시겠습니까?", "Message", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Hide();
+                        base.OnClosing(e);
+                    }
+                }
+                else
+                {
+                    this.Hide();
+                    base.OnClosing(e);
+                }
+            }
         }
     }
 }

@@ -113,7 +113,7 @@ namespace TestHelper
             if (listViewItem.IsSelected)
             {
                 InspectionPageInfo item = listViewItem.DataContext as InspectionPageInfo;
-                InspectionDetailWindow subWindow = new InspectionDetailWindow(item);
+                InspectionDetailWindow subWindow = new InspectionDetailWindow(item, false);
                 subWindow.Owner = Application.Current.MainWindow;
                 subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 subWindow.ShowDialog();
@@ -131,7 +131,7 @@ namespace TestHelper
             {
                 case 0:
                     {
-                        InspectionSettingWindow subWindow = new InspectionSettingWindow();
+                        InspectionSettingWindow subWindow = new InspectionSettingWindow(inspectionPageInfoList);
                         subWindow.Owner = Application.Current.MainWindow;
                         subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                         subWindow.ShowDialog();

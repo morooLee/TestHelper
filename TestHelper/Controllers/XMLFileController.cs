@@ -70,12 +70,21 @@ namespace TestHelper.Controllers
         public void GetInspectionList(ObservableCollection<InspectionPageInfo> inspectionPageInfoList)
         {
             WebDriverController webDriverController = new WebDriverController();
+            ObservableCollection<InspectionPageInfo> tmp = new ObservableCollection<InspectionPageInfo>();
             try
             {
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(path);
 
                 XmlNodeList xmlNodeList = xmlDoc.SelectNodes("//Inspections/Inspection");
+
+                if (inspectionPageInfoList != null)
+                {
+                    if (inspectionPageInfoList.Count > 0)
+                    {
+                        inspectionPageInfoList.Clear();
+                    }
+                }
 
                 foreach (XmlNode item in xmlNodeList)
                 {
@@ -94,6 +103,23 @@ namespace TestHelper.Controllers
             {
                 MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public void SetInspectionList(ObservableCollection<InspectionPageInfo> inspectionPageInfoList)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(path);
+
+            XmlNode parentNode = xmlDoc.GetElementsByTagName("Inspections")[0];
+
+            parentNode.RemoveAll();
+
+            foreach (InspectionPageInfo item in inspectionPageInfoList)
+            {
+                SetInspectionXml(parentNode, item.PageName, item.Url);
+            }
+
+            xmlDoc.Save(path);
         }
     }
 }

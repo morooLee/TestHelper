@@ -87,7 +87,7 @@ namespace TestHelper.Models
 
         private void OnPropertyChanged(string prop)
         {
-            if (this.PropertyChanged != null)
+            if (PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TestHelper.Windows.Inspection"
         xmlns:model="clr-namespace:TestHelper.Models"
         mc:Ignorable="d"
-        Title="InspectionSettingWindow" Height="300" Width="500" Icon="/TestHelper;component/Resources/Sign_Icon.ico" ShowInTaskbar="False" ResizeMode="CanResize" Loaded="Window_Loaded">
+        Title="InspectionSettingWindow" Height="300" Width="550" Icon="/TestHelper;component/Resources/Sign_Icon.ico" ShowInTaskbar="False" ResizeMode="CanResize" Loaded="Window_Loaded">
     <Grid>
         <Grid.Resources>
             <model:InspectionPageInfoList x:Key="InspectionListKey" />
@@ -23,9 +23,8 @@
                     <Button Height="22" Width="22" Background="{x:Null}" BorderBrush="{x:Null}">
                         <Image Source="/TestHelper;component/Resources/Download_grey.ico"/>
                     </Button>-->
-                    <Button Height="22" Content="적용"/>
-                    <StackPanel Width="10" />
-                    <Button Height="22" Content="취소"/>
+                    <Button Name="Apply_Button" Margin="0,0,5,0" Height="22" Content="적용" Click="Apply_Button_Click"/>
+                    <Button Name="Cancel_Button" Height="22" Content="취소" Click="Cancel_Button_Click"/>
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                     <!--<Button Height="22" Width="22" Background="{x:Null}" BorderBrush="{x:Null}">
@@ -34,9 +33,11 @@
                     <Button Height="22" Width="22" Background="{x:Null}" BorderBrush="{x:Null}">
                         <Image Source="/TestHelper;component/Resources/Download_grey.ico"/>
                     </Button>-->
-                    <Button Height="22" Content="위로"/>
-                    <StackPanel Width="10" />
-                    <Button Height="22" Content="아래로"/>
+                    <Button Name="Up_Button" Height="22" Margin="0,0,5,0" Content="위로" Click="Up_Button_Click" />
+                    <Button Name="Down_Button" Height="22" Margin="0,0,20,0" Content="아래로" Click="Down_Button_Click" />
+                    <Button Name="Add_Button" Height="22" Margin="0,0,5,0" Content="추가" Click="Add_Button_Click" />
+                    <Button Name="Edit_Button" Height="22" Margin="0,0,5,0" Content="변경" Click="Edit_Button_Click" />
+                    <Button Name="Del_Button" Height="22" Margin="0,0,5,0" Content="삭제" Click="Del_Button_Click" />
                 </StackPanel>
             </DockPanel>
             <ListView Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" >

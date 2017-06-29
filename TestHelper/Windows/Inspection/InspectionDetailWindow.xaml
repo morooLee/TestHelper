@@ -32,8 +32,9 @@
                 <TextBlock Grid.Column="0" Text="점검시간" FontWeight="Bold" VerticalAlignment="Center" />
                 <TextBox Grid.Column="1" Name="Date_TextBox" IsReadOnly="True" VerticalContentAlignment="Center" />
             </Grid>
-            <StackPanel Margin="0,10,0,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <StackPanel Name="Buttons_StackPanel" Margin="0,10,0,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
                 <Button Name="Apply_Button" Content="확인" Click="Apply_Button_Click" />
+                <!--<Button Name="Cancel_Button" Margin="10,0,0,0" Content="취소" Click="Cancel_Button_Click" />-->
             </StackPanel>
         </StackPanel>
     </Grid>
