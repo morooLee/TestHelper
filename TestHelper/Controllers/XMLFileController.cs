@@ -78,14 +78,6 @@ namespace TestHelper.Controllers
 
                 XmlNodeList xmlNodeList = xmlDoc.SelectNodes("//Inspections/Inspection");
 
-                if (inspectionPageInfoList != null)
-                {
-                    if (inspectionPageInfoList.Count > 0)
-                    {
-                        inspectionPageInfoList.Clear();
-                    }
-                }
-
                 foreach (XmlNode item in xmlNodeList)
                 {
                     InspectionPageInfo inspectionPageInfo = new InspectionPageInfo();
@@ -101,7 +93,7 @@ namespace TestHelper.Controllers
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(e.Message + e.Data, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

@@ -20,6 +20,7 @@ using TestHelper.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 using TestHelper.Windows.Inspection;
+using System.ComponentModel;
 
 namespace TestHelper
 {
@@ -30,13 +31,18 @@ namespace TestHelper
     {
         XMLFileController xmlController = new XMLFileController();
         ObservableCollection<InspectionPageInfo> inspectionPageInfoList = new ObservableCollection<InspectionPageInfo>();
+        bool sd = false;
 
         public MainWindow()
         {
             xmlController.FileCheck();
-            xmlController.GetInspectionList(inspectionPageInfoList);
-
+            
             InitializeComponent();
+        }
+
+        private void InspectionPageInfoList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            sd = true;
         }
 
         private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
@@ -46,15 +52,21 @@ namespace TestHelper
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            InspectionPageInfoList_ListView.ItemsSource = inspectionPageInfoList;
-            
+
         }
 
         private void InspectionPageInfoList_ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListView listView = sender as ListView;
             InspectionPageInfo item = listView.SelectedItem as InspectionPageInfo;
-            Inspection_WebBrowser.Source = new Uri(item.Url);
+            if (item != null)
+            {
+                Inspection_WebBrowser.Source = new Uri(item.Url);
+            }
+            else
+            {
+                Inspection_WebBrowser.Source = null;
+            }
         }
 
         private void Inspection_WebBrowser_LoadCompleted(object sender, NavigationEventArgs e)
@@ -122,7 +134,8 @@ namespace TestHelper
 
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
-
+            xmlController.GetInspectionList(inspectionPageInfoList);
+            InspectionPageInfoList_ListView.ItemsSource = inspectionPageInfoList;
         }
 
         private void Setting_Menu_Click(object sender, RoutedEventArgs e)
@@ -131,10 +144,16 @@ namespace TestHelper
             {
                 case 0:
                     {
+                        ObservableCollection<InspectionPageInfo> tmp = new ObservableCollection<InspectionPageInfo>();
                         InspectionSettingWindow subWindow = new InspectionSettingWindow(inspectionPageInfoList);
                         subWindow.Owner = Application.Current.MainWindow;
                         subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                         subWindow.ShowDialog();
+
+                        if (inspectionPageInfoList.Count > 0)
+                        {
+                            Inspection_WebBrowser.Source = new Uri(inspectionPageInfoList[0].Url);
+                        }
                         break;
                     }
             }

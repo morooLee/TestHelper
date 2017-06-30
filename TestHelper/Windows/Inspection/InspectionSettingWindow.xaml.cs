@@ -24,15 +24,13 @@ namespace TestHelper.Windows.Inspection
     {
         XMLFileController xmlController = new XMLFileController();
         ObservableCollection<InspectionPageInfo> inspectionPageInfoList = new ObservableCollection<InspectionPageInfo>();
-        ObservableCollection<InspectionPageInfo> tmp = new ObservableCollection<InspectionPageInfo>();
         bool dataContextChanged = false;
 
         public InspectionSettingWindow(ObservableCollection<InspectionPageInfo> _inspectionPageInfoList)
         {
-            tmp = _inspectionPageInfoList;
             xmlController.GetInspectionList(inspectionPageInfoList);
-
             inspectionPageInfoList.CollectionChanged += InspectionPageInfoList_CollectionChanged;
+
             InitializeComponent();
         }
 
@@ -133,8 +131,16 @@ namespace TestHelper.Windows.Inspection
             if(dataContextChanged)
             {
                 xmlController.SetInspectionList(inspectionPageInfoList);
-                //tmp = inspectionPageInfoList;
-                xmlController.GetInspectionList(tmp);
+                ListView lv = Owner.FindName("InspectionPageInfoList_ListView") as ListView;
+                ObservableCollection<InspectionPageInfo> tmp = lv.Items.SourceCollection as ObservableCollection<InspectionPageInfo>;
+
+                tmp.Clear();
+
+                foreach (InspectionPageInfo item in inspectionPageInfoList)
+                {
+                    tmp.Add(item);
+                }
+
                 dataContextChanged = false;
 
                 Close();
