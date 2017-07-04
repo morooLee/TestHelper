@@ -21,6 +21,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using TestHelper.Windows.Inspection;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace TestHelper
 {
@@ -31,12 +32,12 @@ namespace TestHelper
     {
         XMLFileController xmlController = new XMLFileController();
         ObservableCollection<InspectionPageInfo> inspectionPageInfoList = new ObservableCollection<InspectionPageInfo>();
+        ObservableCollection<GNBPageInfo> gnbPageInfoList = new ObservableCollection<GNBPageInfo>();
         bool sd = false;
 
         public MainWindow()
         {
             xmlController.FileCheck();
-            
             InitializeComponent();
         }
 
@@ -61,7 +62,15 @@ namespace TestHelper
             InspectionPageInfo item = listView.SelectedItem as InspectionPageInfo;
             if (item != null)
             {
-                Inspection_WebBrowser.Source = new Uri(item.Url);
+                try
+                {
+                    Inspection_WebBrowser.Source = new Uri(item.Url);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Inspection_WebBrowser.Source = null;
+                }
             }
             else
             {
@@ -132,10 +141,10 @@ namespace TestHelper
             }
         }
 
-        private void TabItem_Loaded(object sender, RoutedEventArgs e)
+        private void Inspection_TabItem_Loaded(object sender, RoutedEventArgs e)
         {
-            xmlController.GetInspectionList(inspectionPageInfoList);
-            InspectionPageInfoList_ListView.ItemsSource = inspectionPageInfoList;
+            //xmlController.GetInspectionList(inspectionPageInfoList);
+            //InspectionPageInfoList_ListView.ItemsSource = inspectionPageInfoList;
         }
 
         private void Setting_Menu_Click(object sender, RoutedEventArgs e)
@@ -156,6 +165,40 @@ namespace TestHelper
                         }
                         break;
                     }
+            }
+        }
+
+        private void GNB_TabItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            //xmlController.GetGNBList(gnbPageInfoList);
+            //GNBPageInfoList_ListView.ItemsSource = gnbPageInfoList;
+        }
+
+        private void GNBPageInfoList_ListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            xmlController.GetGNBList(gnbPageInfoList);
+            GNBPageInfoList_ListView.ItemsSource = gnbPageInfoList;
+        }
+
+        private void InspectionPageInfoList_ListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            xmlController.GetInspectionList(inspectionPageInfoList);
+            InspectionPageInfoList_ListView.ItemsSource = inspectionPageInfoList;
+        }
+
+        public class IndexConverter : IValueConverter
+        {
+            public object Convert(object value, Type TargetType, object parameter, CultureInfo culture)
+            {
+                var item = (ListViewItem)value;
+                var listView = ItemsControl.ItemsControlFromItemContainer(item) as ListView;
+                int index = listView.ItemContainerGenerator.IndexFromContainer(item) + 1;
+                return index.ToString();
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new NotImplementedException();
             }
         }
     }

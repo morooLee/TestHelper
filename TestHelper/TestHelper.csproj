@@ -82,6 +82,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\GNBPageInfoListViewModel.cs" />
     <Compile Include="Windows\Inspection\InspectionDetailWindow.xaml.cs">
       <DependentUpon>InspectionDetailWindow.xaml</DependentUpon>
     </Compile>

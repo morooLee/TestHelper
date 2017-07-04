@@ -46,15 +46,7 @@ namespace TestHelper.Windows.Inspection
 
         private void InspectionPageInfoList_ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //ListViewItem listViewItem = sender as ListViewItem;
-            //if (listViewItem.IsSelected)
-            //{
-            //    InspectionPageInfo item = listViewItem.DataContext as InspectionPageInfo;
-            //    InspectionDetailWindow subWindow = new InspectionDetailWindow(item);
-            //    subWindow.Owner = Application.Current.MainWindow;
-            //    subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            //    subWindow.ShowDialog();
-            //}
+            Edit_ListViewItem();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -99,18 +91,7 @@ namespace TestHelper.Windows.Inspection
 
         private void Edit_Button_Click(object sender, RoutedEventArgs e)
         {
-            InspectionPageInfo item = InspectionPageInfoList_ListView.SelectedItem as InspectionPageInfo;
-            if (item == null)
-            {
-                MessageBox.Show("선택된 항목이 없습니다.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                InspectionDetailWindow subWindow = new InspectionDetailWindow(item, true);
-                subWindow.Owner = this;
-                subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                subWindow.ShowDialog();
-            }
+            Edit_ListViewItem();
         }
 
         private void Del_Button_Click(object sender, RoutedEventArgs e)
@@ -169,6 +150,22 @@ namespace TestHelper.Windows.Inspection
                     this.Hide();
                     base.OnClosing(e);
                 }
+            }
+        }
+
+        private void Edit_ListViewItem()
+        {
+            InspectionPageInfo item = InspectionPageInfoList_ListView.SelectedItem as InspectionPageInfo;
+            if (item == null)
+            {
+                MessageBox.Show("선택된 항목이 없습니다.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                InspectionDetailWindow subWindow = new InspectionDetailWindow(item, true);
+                subWindow.Owner = this;
+                subWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                subWindow.ShowDialog();
             }
         }
     }

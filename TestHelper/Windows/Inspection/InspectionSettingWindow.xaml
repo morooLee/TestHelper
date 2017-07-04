@@ -41,6 +41,15 @@
                 </StackPanel>
             </DockPanel>
             <ListView Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" >
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="추가" Click="Add_Button_Click"/>
+                        <MenuItem Header="수정" Click="Edit_Button_Click"/>
+                        <MenuItem Header="삭제" Click="Del_Button_Click"/>
+                        <MenuItem Header="위로" Click="Up_Button_Click"/>
+                        <MenuItem Header="아래로" Click="Down_Button_Click"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
                 <ListView.View>
                     <GridView AllowsColumnReorder="True">
                         <GridViewColumn DisplayMemberBinding="{Binding Path=PageName}" Header="Page" />

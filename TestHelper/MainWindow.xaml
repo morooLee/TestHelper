@@ -7,6 +7,10 @@
         xmlns:model="clr-namespace:TestHelper.Models"
         mc:Ignorable="d"
         Title="Moroo | TestHelper" Height="600" Width="900" Icon="Resources/Sign_Icon.ico" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Converter:IndexConverter x:Key="IndexConverter" />
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="23"></RowDefinition>
@@ -38,7 +42,7 @@
         </Menu>
         </Grid>
         <TabControl Grid.Row="1" Name="Tab_Control" TabStripPlacement="Left">
-            <TabItem Header="Inspection" ToolTip="점검" Loaded="TabItem_Loaded">
+            <TabItem Name="Inspection_TabItem" Header="Inspection" ToolTip="점검" Loaded="Inspection_TabItem_Loaded">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0"></RowDefinition>
@@ -56,7 +60,7 @@
                             <ColumnDefinition Width=""></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>-->
-                        <ListView DockPanel.Dock="Left" Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" >
+                        <ListView DockPanel.Dock="Left" Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" Loaded="InspectionPageInfoList_ListView_Loaded" >
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
                                     <GridViewColumn DisplayMemberBinding="{Binding Path=PageName}" Header="Page" />
@@ -86,8 +90,26 @@
                     </DockPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="GNB" ToolTip="GNB 적용 여부">
-
+            <TabItem Name="GNB_TabItem" Header="GNB" ToolTip="GNB 적용 여부" Loaded="GNB_TabItem_Loaded">
+                <TabItem.Resources>
+                    <model:GNBPageInfoList x:Key="GNBListKey" />
+                    <Style x:Key="GNBListViewItem" TargetType="{x:Type ListViewItem}">
+                        <!--<EventSetter Event="MouseDoubleClick" Handler="InspectionPageInfoList_ListView_MouseDoubleClick" />-->
+                    </Style>
+                </TabItem.Resources>
+                <ListView Name="GNBPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource GNBListKey}}" ItemContainerStyle="{StaticResource GNBListViewItem}" Loaded="GNBPageInfoList_ListView_Loaded">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="100" Header="No." DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource IndexConverter}}" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="페이지명" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Url}" Header="주소" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Code}" Header="페이지코드" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=IsPCHub}" Header="PC방 혜택" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=IsMyBanner}" Header="맞춤 혜택" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=IsCheckedA2S}" Header="A2S" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="2" Name="statusBar" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
