@@ -7,65 +7,79 @@ using System.IO;
 using System.Net;
 using System.Windows.Controls;
 using TestHelper;
+using System.Collections.ObjectModel;
+using TestHelper.Models;
+using System.Windows;
+using mshtml;
 
 namespace TestHelper.Controllers
 {
     public class WebDriverController
     {
-        public void GnbCheck(string url)
+        public void GnbCheck(ObservableCollection<GNBPageInfo> gnbPageInfoList)
         {
+            foreach (GNBPageInfo item in gnbPageInfoList)
+            {
+                if (item.IsChecked)
+                {
+                    GNBPageInfo tmp = new GNBPageInfo();
+                    tmp = item;
+                    GnbCheck(tmp);
+                }
+            }
+        }
+
+        private GNBPageInfo GnbCheck(GNBPageInfo gnbPageInfo)
+        {
+            string url = gnbPageInfo.Url;
+            HTMLDocument doc = WebDocumentParser(url);
+
             try
             {
-                string contentType = "";
-                //HttpWebRequest req = (HttpWebRequest)WebRequest.Create(new Uri(url));
-                //req.Method = "GET";
-                ////req.ContentType = "multipart/form-data";
-                //////req.Method = "HEAD";
-                //HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-                //StreamReader streamReader = new StreamReader(res.GetResponseStream(), Encoding.Default);
-                //contentType = streamReader.ReadToEnd();
-                //streamReader.Close();
-                //res.Close();
-
-                //Console.WriteLine(contentType);
-
-                //WebClient webClient = new WebClient();
-                //contentType = webClient.DownloadString(url);
-                //Stream stream = webClient.OpenRead(url);
-
-                //StreamReader streamReader = new StreamReader(stream);
-
-                //contentType = streamReader.ReadToEnd();
-                //stream.Close();
-                //stream.Dispose();
-                //webClient.Dispose();
-
-                //string[] arr = contentType.Split('\n');
-                //foreach (string item in arr)
-                //{
-                //    if (item.Contains("id=\"InspectionTime\""))
-                //    {
-                //        Console.WriteLine(item);
-                //    }
-                //}
-
-                //WebBrowser wb = new WebBrowser();
-                //wb.Source = new Uri(url);
-                //wb.Navigate(new Uri(url));
-                
-                //if (wb != null)
-                //{
-                //    Console.WriteLine(contentType);
-                //}
-                
-                //var doc = (wb.Document as mshtml.HTMLDocument).getElementById("InspectionTime");
-                ////var doc = (wb.Document as mshtml.HTMLDocument).getElementById("InspectionTime");
-                //Console.WriteLine(doc.innerText);
+                IHTMLTable table = (IHTMLTable)doc.getElementById("stript");
+                IHTMLElementCollection co = table.rows;
+                Console.WriteLine(co.length);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                MessageBox.Show(e.Message, "Error - GnbCheck", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            return gnbPageInfo;
+        }
+
+        private HTMLDocument WebDocumentParser(string url)
+        {
+            HTMLDocument doc = new HTMLDocument();
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                
+                Stream stream = response.GetResponseStream();
+                StreamReader streamReader = new StreamReader(stream, Encoding.UTF8);
+                string content = streamReader.ReadToEnd();
+
+                doc.designMode = "on";
+                object[] oPageText = { content };
+                IHTMLDocument2 oMyDoc = doc as IHTMLDocument2;
+                oMyDoc.write(oPageText);
+
+                stream.Close();
+                streamReader.Close();
+                response.Close();
+            }
+            catch (WebException e)
+            {
+                MessageBox.Show(e.Message + e.Data, "Error - WebEcveption", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message + e.Data, "Error - WebDocumentParser", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return doc;
         }
     }
 }

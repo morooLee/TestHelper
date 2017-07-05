@@ -31,6 +31,7 @@ namespace TestHelper
     public partial class MainWindow : Window
     {
         XMLFileController xmlController = new XMLFileController();
+        WebDriverController webDriverController = new WebDriverController();
         ObservableCollection<InspectionPageInfo> inspectionPageInfoList = null;
         ObservableCollection<GNBPageInfo> gnbPageInfoList = null;
         bool sd = false;
@@ -125,6 +126,10 @@ namespace TestHelper
                         Inspection_WebBrowser.Refresh();
                         break;
                     }
+                case 1:
+                    {
+                        break;
+                    }
             }
         }
 
@@ -163,6 +168,10 @@ namespace TestHelper
                         {
                             Inspection_WebBrowser.Source = new Uri(inspectionPageInfoList[0].Url);
                         }
+                        break;
+                    }
+                case 1:
+                    {
                         break;
                     }
             }
@@ -244,6 +253,45 @@ namespace TestHelper
                 {
                     item.IsChecked = false;
                 }
+            }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void Action_Menu_Click(object sender, RoutedEventArgs e)
+        {
+            switch (Tab_Control.SelectedIndex)
+            {
+                case 0:
+                    {
+                        
+                        break;
+                    }
+                case 1:
+                    {
+                        webDriverController.GnbCheck(gnbPageInfoList);
+                        break;
+                    }
+            }
+        }
+
+        private void Tab_Control_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch(Tab_Control.SelectedIndex)
+            {
+                case 0:
+                    {
+                        Action_MenuItem.Visibility = Visibility.Hidden;
+                        break;
+                    }
+                case 1:
+                    {
+                        Action_MenuItem.Visibility = Visibility.Visible;
+                        break;
+                    }
             }
         }
     }

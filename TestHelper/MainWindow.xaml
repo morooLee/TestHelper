@@ -18,63 +18,72 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="70"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Menu Grid.Column="0">
                 
             </Menu>
             <Menu Grid.Column="1" HorizontalAlignment="Right">
-            <MenuItem Click="Refresh_Menu_Click">
+                <MenuItem Name="Action_MenuItem" Click="Action_Menu_Click">
+                    <MenuItem.Header>
+                        <Image Source="Resources/Refresh_grey.ico" Name="Action_Button" Margin="0,2,0,2" ToolTip="실행" />
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem Click="Refresh_Menu_Click">
                 <MenuItem.Header>
-                    <Image Source="Resources/Refresh_grey.ico" Name="Refresh_Button" Margin="2" ToolTip="새로고침" />
+                        <Image Source="Resources/Refresh_grey.ico" Name="Refresh_Button" Margin="0,2,0,2" ToolTip="새로고침" />
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Click="Setting_Menu_Click">
+                <MenuItem Click="Setting_Menu_Click">
                 <MenuItem.Header>
                     <!--<Button Height="22" Width="22" ToolTip="설정" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}">
                         <Image Source="Resources/Settings.ico" />
                     </Button>-->
-                    <Image Source="Resources/Settings.ico" Name="Setting_Button" Margin="2" ToolTip="설정" />
+                        <Image Source="Resources/Settings.ico" Name="Setting_Button" Margin="0,2,0,2" ToolTip="설정" />
                 </MenuItem.Header>
             </MenuItem>
-        </Menu>
+            </Menu>
         </Grid>
-        <TabControl Grid.Row="1" Name="Tab_Control" TabStripPlacement="Left">
-            <TabItem Name="Inspection_TabItem" Header="Inspection" ToolTip="점검" Loaded="Inspection_TabItem_Loaded">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    
-                    <DockPanel Grid.Row="1" >
-                        <DockPanel.Resources>
-                            <model:InspectionPageInfoList x:Key="InspectionListKey" />
-                            <Style x:Key="ListViewStyle" TargetType="{x:Type ListViewItem}">
-                                <EventSetter Event="MouseDoubleClick" Handler="InspectionPageInfoList_ListView_MouseDoubleClick" />
-                            </Style>
-                        </DockPanel.Resources>
-                        <!--<Grid.ColumnDefinitions>
+        <TabControl Grid.Row="1" Name="Tab_Control" TabStripPlacement="Left" SelectionChanged="Tab_Control_SelectionChanged">
+            <TabItem Name="Inspection_TabItem" Loaded="Inspection_TabItem_Loaded">
+                <TabItem.Header>
+                    <TextBlock Text="Inspection" ToolTip="점검" />
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <DockPanel Grid.Row="1" >
+                            <DockPanel.Resources>
+                                <model:InspectionPageInfoList x:Key="InspectionListKey" />
+                                <Style x:Key="ListViewStyle" TargetType="{x:Type ListViewItem}">
+                                    <EventSetter Event="MouseDoubleClick" Handler="InspectionPageInfoList_ListView_MouseDoubleClick" />
+                                </Style>
+                            </DockPanel.Resources>
+                            <!--<Grid.ColumnDefinitions>
                             <ColumnDefinition Width=""></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>-->
-                        <ListView DockPanel.Dock="Left" Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" Loaded="InspectionPageInfoList_ListView_Loaded" >
-                            <ListView.View>
-                                <GridView AllowsColumnReorder="True">
-                                    <GridViewColumn DisplayMemberBinding="{Binding Path=PageName}" Header="Page" />
-                                    <!--<GridViewColumn DisplayMemberBinding="{Binding Path=InspectionDate}" Header="Date" Width="80" />-->
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                        <Grid Grid.Column="1" DockPanel.Dock="Top">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="23"></RowDefinition>
-                                <RowDefinition Height="*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <DockPanel Grid.Row="0">
-                                <Border DockPanel.Dock="Bottom" BorderThickness="0.5" BorderBrush="#FFACACAC"></Border>
-                                <TextBlock Name="Date_TextBlock" DockPanel.Dock="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold" />
-                                <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                            <ListView DockPanel.Dock="Left" Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" Loaded="InspectionPageInfoList_ListView_Loaded" >
+                                <ListView.View>
+                                    <GridView AllowsColumnReorder="True">
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=PageName}" Header="Page" />
+                                        <!--<GridViewColumn DisplayMemberBinding="{Binding Path=InspectionDate}" Header="Date" Width="80" />-->
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Grid Grid.Column="1" DockPanel.Dock="Top">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="23"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <DockPanel Grid.Row="0">
+                                    <Border DockPanel.Dock="Bottom" BorderThickness="0.5" BorderBrush="#FFACACAC"></Border>
+                                    <TextBlock Name="Date_TextBlock" DockPanel.Dock="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold" />
+                                    <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
                                     <Button Height="22" Width="22" ToolTip="새로고침" Name="Refresh_Button" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" Click="Refresh_Button_Click">
                                         <Image Source="Resources/Refresh_grey.ico" />
                                     </Button>
@@ -82,13 +91,14 @@
                                         <Image Source="Resources/Settings.ico" />
                                     </Button>
                                 </StackPanel>-->
-                            </DockPanel>
-                            <WebBrowser Name="Inspection_WebBrowser" Grid.Row="1" LoadCompleted="Inspection_WebBrowser_LoadCompleted" />
-                        </Grid>
-                    </DockPanel>
-                </Grid>
+                                </DockPanel>
+                                <WebBrowser Name="Inspection_WebBrowser" Grid.Row="1" LoadCompleted="Inspection_WebBrowser_LoadCompleted" />
+                            </Grid>
+                        </DockPanel>
+                    </Grid>
+                </TabItem.Content>
             </TabItem>
-            <TabItem Name="GNB_TabItem" Header="GNB" ToolTip="GNB 적용 여부" Loaded="GNB_TabItem_Loaded">
+            <TabItem Name="GNB_TabItem" Loaded="GNB_TabItem_Loaded">
                 <TabItem.Resources>
                     <model:GNBPageInfoList x:Key="GNBListKey" />
                     <control:IndexConverter x:Key="IndexConverter" />
@@ -97,72 +107,144 @@
                         <EventSetter Event="MouseUp" Handler="GNBListItem_MouseUp"/>
                     </Style>
                 </TabItem.Resources>
-                <ListView Name="GNBPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource GNBListKey}}" ItemContainerStyle="{StaticResource GNBListViewItem}" Loaded="GNBPageInfoList_ListView_Loaded">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn>
-                                <GridViewColumnHeader>
-                                    <CheckBox Name="Header_CheckBox" Checked="Header_CheckBox_Checked" Unchecked="Header_CheckBox_Unchecked" />
-                                </GridViewColumnHeader>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Path=IsChecked}" IsThreeState="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="40" DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource IndexConverter}}" Header="No." />
-                            <GridViewColumn Width="40" Header="상태">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Width="20" Height="20">
-                                            <Image.Style>
-                                                <Style TargetType="Image">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Status}" Value="True">
-                                                            <Setter Property="Source" Value="Resources/StatusOK.ico" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="False">
-                                                            <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Image.Style>
-                                        </Image>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="100" Header="카테고리">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock>
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Category}" Value="Common">
-                                                            <Setter Property="Text" Value="공통 페이지" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Category}" Value="PCOnline">
-                                                            <Setter Property="Text" Value="온라인 게임" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Category}" Value="Mobile">
-                                                            <Setter Property="Text" Value="모바일 게임" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Name}" Header="페이지명" />
-                            <GridViewColumn Width="360" DisplayMemberBinding="{Binding Path=Url}" Header="주소" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Code}" Header="페이지코드" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=IsPCHub}" Header="PC방 혜택" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=IsMyBanner}" Header="맞춤 혜택" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=IsCheckedA2S}" Header="A2S" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <TabItem.Header>
+                    <TextBlock Text="GNB" ToolTip="GNB 적용 상태" />
+                </TabItem.Header>
+                <TabItem.Content>
+                    <ListView Name="GNBPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource GNBListKey}}" ItemContainerStyle="{StaticResource GNBListViewItem}" Loaded="GNBPageInfoList_ListView_Loaded">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn>
+                                    <GridViewColumnHeader>
+                                        <CheckBox Name="Header_CheckBox" Checked="Header_CheckBox_Checked" Unchecked="Header_CheckBox_Unchecked" ToolTip="전체 선택/해제"/>
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding Path=IsChecked}" IsThreeState="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="40" DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource IndexConverter}}">
+                                    <GridViewColumnHeader>
+                                        <TextBlock Text="#" ToolTip="인덱스" />
+                                    </GridViewColumnHeader>
+                                </GridViewColumn>
+                                <GridViewColumn Width="40">
+                                    <GridViewColumnHeader>
+                                        <TextBlock Text="상태" ToolTip="요청 상태" />
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Width="20" Height="20">
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Status}" Value="True">
+                                                                <Setter Property="Source" Value="Resources/StatusOK.ico" />
+                                                                <Setter Property="ToolTip" Value="성공" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="False">
+                                                                <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
+                                                                <Setter Property="ToolTip" Value="실패" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="100">
+                                    <GridViewColumnHeader>
+                                        <TextBlock Text="카테고리" ToolTip="카테고리" />
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="ToolTip" Value="{Binding Category}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Common">
+                                                                <Setter Property="Text" Value="공통 페이지" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Category}" Value="PCOnline">
+                                                                <Setter Property="Text" Value="온라인 게임" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Mobile">
+                                                                <Setter Property="Text" Value="모바일 게임" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="100">
+                                    <GridViewColumnHeader>
+                                        <TextBlock Text="페이지명" ToolTip="페이지명(게임명)" />
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Name}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="360">
+                                    <GridViewColumnHeader>
+                                        <TextBlock Text="주소" ToolTip="URL" />
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Url}" ToolTip="{Binding Path=Url}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn>
+                                    <GridViewColumnHeader>
+                                        <TextBlock Text="페이지 코드" ToolTip="페이지 코드(게임코드)" />
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Code}" ToolTip="{Binding Path=Code}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn>
+                                    <GridViewColumnHeader>
+                                        <TextBlock Text="PC방 혜택" ToolTip="PC방 혜택 사용여부" />
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=IsPCHub}" ToolTip="{Binding Path=IsPCHub}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn>
+                                    <GridViewColumnHeader>
+                                        <TextBlock Text="맞춤 혜택" ToolTip="맞춤 혜택 사용여부" />
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=IsMyBanner}" ToolTip="{Binding Path=IsMyBanner}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn>
+                                    <GridViewColumnHeader>
+                                        <TextBlock Text="A2S" ToolTip="A2S 스크립트 적용 여부" />
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=IsCheckedA2S}" ToolTip="{Binding Path=IsCheckedA2S}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </TabItem.Content>
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="2" Name="statusBar" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
