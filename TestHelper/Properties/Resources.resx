@@ -130,6 +130,12 @@
   <data name="Sign_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Sign_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="StatusCriticalError" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StatusCriticalError.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StatusOK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StatusOK.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Upload_gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Upload_gray.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

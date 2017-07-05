@@ -25,13 +25,28 @@ namespace TestHelper.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private bool _isChecked = false;
         private Category _category = Category.None;
+        private bool _status = false;
         private string _name = string.Empty;
         private string _url = string.Empty;
         private string _code = string.Empty;
-        private bool _ispchub = false;
-        private bool _ismybanner = false;
-        private bool _isCheckedA2S = false;
+        private bool? _ispchub = null;
+        private bool? _ismybanner = null;
+        private bool? _isCheckedA2S = null;
+
+        public bool IsChecked
+        {
+            get
+            {
+                return _isChecked;
+            }
+            set
+            {
+                _isChecked = value;
+                this.OnPropertyChanged("IsChecked");
+            }
+        }
 
         public Category Category
         {
@@ -45,6 +60,20 @@ namespace TestHelper.Models
                 this.OnPropertyChanged("Category");
             }
         }
+
+        public bool Status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                _status = value;
+                this.OnPropertyChanged("Status");
+            }
+        }
+
         public string Name
         {
             get
@@ -84,7 +113,7 @@ namespace TestHelper.Models
             }
         }
 
-        public bool IsPCHub
+        public bool? IsPCHub
         {
             get
             {
@@ -97,7 +126,7 @@ namespace TestHelper.Models
             }
         }
 
-        public bool IsMyBanner
+        public bool? IsMyBanner
         {
             get
             {
@@ -110,7 +139,7 @@ namespace TestHelper.Models
             }
         }
 
-        public bool IsCheckedA2S
+        public bool? IsCheckedA2S
         {
             get
             {

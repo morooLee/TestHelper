@@ -82,6 +82,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controllers\IndexConverter.cs" />
     <Compile Include="Models\GNBPageInfoListViewModel.cs" />
     <Compile Include="Windows\Inspection\InspectionDetailWindow.xaml.cs">
       <DependentUpon>InspectionDetailWindow.xaml</DependentUpon>
@@ -169,6 +170,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Download_grey.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\StatusOK.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\StatusCriticalError.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

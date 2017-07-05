@@ -31,8 +31,8 @@ namespace TestHelper
     public partial class MainWindow : Window
     {
         XMLFileController xmlController = new XMLFileController();
-        ObservableCollection<InspectionPageInfo> inspectionPageInfoList = new ObservableCollection<InspectionPageInfo>();
-        ObservableCollection<GNBPageInfo> gnbPageInfoList = new ObservableCollection<GNBPageInfo>();
+        ObservableCollection<InspectionPageInfo> inspectionPageInfoList = null;
+        ObservableCollection<GNBPageInfo> gnbPageInfoList = null;
         bool sd = false;
 
         public MainWindow()
@@ -176,29 +176,74 @@ namespace TestHelper
 
         private void GNBPageInfoList_ListView_Loaded(object sender, RoutedEventArgs e)
         {
-            xmlController.GetGNBList(gnbPageInfoList);
-            GNBPageInfoList_ListView.ItemsSource = gnbPageInfoList;
+            if (gnbPageInfoList == null)
+            {
+                gnbPageInfoList = new ObservableCollection<GNBPageInfo>();
+
+                xmlController.GetGNBList(gnbPageInfoList);
+                GNBPageInfoList_ListView.ItemsSource = gnbPageInfoList;
+            }
         }
 
         private void InspectionPageInfoList_ListView_Loaded(object sender, RoutedEventArgs e)
         {
-            xmlController.GetInspectionList(inspectionPageInfoList);
-            InspectionPageInfoList_ListView.ItemsSource = inspectionPageInfoList;
+            if (inspectionPageInfoList == null)
+            {
+                inspectionPageInfoList = new ObservableCollection<InspectionPageInfo>();
+
+                xmlController.GetInspectionList(inspectionPageInfoList);
+                InspectionPageInfoList_ListView.ItemsSource = inspectionPageInfoList;
+            }
         }
 
-        public class IndexConverter : IValueConverter
+        private void GNBListItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            public object Convert(object value, Type TargetType, object parameter, CultureInfo culture)
-            {
-                var item = (ListViewItem)value;
-                var listView = ItemsControl.ItemsControlFromItemContainer(item) as ListView;
-                int index = listView.ItemContainerGenerator.IndexFromContainer(item) + 1;
-                return index.ToString();
-            }
+            Console.WriteLine("클릭 ");
+        }
 
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        private void GNBListItem_MouseUp(object sender, RoutedEventArgs e)
+        {
+            ListViewItem listViewItem = sender as ListViewItem;
+            if (listViewItem.IsSelected)
             {
-                throw new NotImplementedException();
+                GNBPageInfo item = listViewItem.DataContext as GNBPageInfo;
+                Console.WriteLine(item.IsChecked);
+            }
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox ckb = sender as CheckBox;
+            GNBPageInfo item = ckb.DataContext as GNBPageInfo;
+            Console.WriteLine(item.IsChecked);
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox ckb = sender as CheckBox;
+            GNBPageInfo item = ckb.DataContext as GNBPageInfo;
+            Console.WriteLine(item.IsChecked);
+        }
+
+        private void Header_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (gnbPageInfoList != null && gnbPageInfoList.Count > 0)
+            {
+                foreach (GNBPageInfo item in gnbPageInfoList)
+                {
+                    item.IsChecked = true;
+                }
+            }
+        }
+
+        private void Header_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (gnbPageInfoList != null && gnbPageInfoList.Count > 0)
+            {
+                foreach (GNBPageInfo item in gnbPageInfoList)
+                {
+                    item.IsChecked = false;
+                }
             }
         }
     }

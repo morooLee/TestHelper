@@ -5,12 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestHelper"
         xmlns:model="clr-namespace:TestHelper.Models"
+        xmlns:control="clr-namespace:TestHelper.Controllers"
         mc:Ignorable="d"
         Title="Moroo | TestHelper" Height="600" Width="900" Icon="Resources/Sign_Icon.ico" Loaded="Window_Loaded">
-    <Window.Resources>
-        <Converter:IndexConverter x:Key="IndexConverter" />
-    </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="23"></RowDefinition>
@@ -93,16 +91,71 @@
             <TabItem Name="GNB_TabItem" Header="GNB" ToolTip="GNB 적용 여부" Loaded="GNB_TabItem_Loaded">
                 <TabItem.Resources>
                     <model:GNBPageInfoList x:Key="GNBListKey" />
-                    <Style x:Key="GNBListViewItem" TargetType="{x:Type ListViewItem}">
-                        <!--<EventSetter Event="MouseDoubleClick" Handler="InspectionPageInfoList_ListView_MouseDoubleClick" />-->
+                    <control:IndexConverter x:Key="IndexConverter" />
+                    <Style x:Key="GNBListViewItem" TargetType="ListViewItem">
+                        <EventSetter Event="MouseDoubleClick" Handler="GNBListItem_MouseDoubleClick"/>
+                        <EventSetter Event="MouseUp" Handler="GNBListItem_MouseUp"/>
                     </Style>
                 </TabItem.Resources>
                 <ListView Name="GNBPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource GNBListKey}}" ItemContainerStyle="{StaticResource GNBListViewItem}" Loaded="GNBPageInfoList_ListView_Loaded">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="100" Header="No." DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource IndexConverter}}" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="페이지명" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Url}" Header="주소" />
+                            <GridViewColumn>
+                                <GridViewColumnHeader>
+                                    <CheckBox Name="Header_CheckBox" Checked="Header_CheckBox_Checked" Unchecked="Header_CheckBox_Unchecked" />
+                                </GridViewColumnHeader>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Path=IsChecked}" IsThreeState="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="40" DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource IndexConverter}}" Header="No." />
+                            <GridViewColumn Width="40" Header="상태">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Width="20" Height="20">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="True">
+                                                            <Setter Property="Source" Value="Resources/StatusOK.ico" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="False">
+                                                            <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="100" Header="카테고리">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Category}" Value="Common">
+                                                            <Setter Property="Text" Value="공통 페이지" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Category}" Value="PCOnline">
+                                                            <Setter Property="Text" Value="온라인 게임" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Category}" Value="Mobile">
+                                                            <Setter Property="Text" Value="모바일 게임" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Name}" Header="페이지명" />
+                            <GridViewColumn Width="360" DisplayMemberBinding="{Binding Path=Url}" Header="주소" />
                             <GridViewColumn DisplayMemberBinding="{Binding Path=Code}" Header="페이지코드" />
                             <GridViewColumn DisplayMemberBinding="{Binding Path=IsPCHub}" Header="PC방 혜택" />
                             <GridViewColumn DisplayMemberBinding="{Binding Path=IsMyBanner}" Header="맞춤 혜택" />
