@@ -10,7 +10,9 @@ using TestHelper;
 using System.Collections.ObjectModel;
 using TestHelper.Models;
 using System.Windows;
-using mshtml;
+using System.Xml.XPath;
+using System.Web;
+using HtmlAgilityPack;
 
 namespace TestHelper.Controllers
 {
@@ -32,25 +34,69 @@ namespace TestHelper.Controllers
         private GNBPageInfo GnbCheck(GNBPageInfo gnbPageInfo)
         {
             string url = gnbPageInfo.Url;
-            HTMLDocument doc = WebDocumentParser(url);
 
             try
             {
-                IHTMLTable table = (IHTMLTable)doc.getElementById("stript");
-                IHTMLElementCollection co = table.rows;
-                Console.WriteLine(co.length);
+                HtmlDocument doc = WebDocumentParser(url);
+                HtmlNodeCollection nodeCol = doc.DocumentNode.SelectNodes("//script");
+
+                foreach (HtmlNode node in nodeCol)
+                {
+                    if (node.Attributes["src"] != null)
+                    {
+                        if (node.Attributes["src"].Value.Contains("gnb.min.js") || node.Attributes["src"].Value.Contains("gnb.js"))
+                        {
+                            Console.WriteLine(gnbPageInfo.Name);
+                            Console.WriteLine(node.OuterHtml);
+                            if (node.Attributes["data-gamecode"] != null)
+                            {
+                                gnbPageInfo.Code = node.Attributes["data-gamecode"].Value;
+                            }
+                            if (node.Attributes["data-ispchub"] != null)
+                            {
+                                if (node.Attributes["data-ispchub"].Value == "true")
+                                {
+                                    gnbPageInfo.IsPCHub = true;
+                                }
+                                else if ((node.Attributes["data-ispchub"].Value == "false"))
+                                {
+                                    gnbPageInfo.IsPCHub = false;
+                                }
+                            }
+                            else
+                            {
+                                gnbPageInfo.IsPCHub = true;
+                            }
+                            if (node.Attributes["data-ismybanner"] != null)
+                            {
+                                if (node.Attributes["data-ismybanner"].Value == "true")
+                                {
+                                    gnbPageInfo.IsMyBanner = true;
+                                }
+                                else if ((node.Attributes["data-ismybanner"].Value == "false"))
+                                {
+                                    gnbPageInfo.IsMyBanner = false;
+                                }
+                            }
+                            else
+                            {
+                                gnbPageInfo.IsMyBanner = true;
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Error - GnbCheck", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(e.Message + e.Data, "Error - GnbCheck", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             return gnbPageInfo;
         }
 
-        private HTMLDocument WebDocumentParser(string url)
+        private HtmlDocument WebDocumentParser(string url)
         {
-            HTMLDocument doc = new HTMLDocument();
+            HtmlDocument doc = new HtmlDocument();
 
             try
             {
@@ -60,11 +106,9 @@ namespace TestHelper.Controllers
                 Stream stream = response.GetResponseStream();
                 StreamReader streamReader = new StreamReader(stream, Encoding.UTF8);
                 string content = streamReader.ReadToEnd();
-
-                doc.designMode = "on";
-                object[] oPageText = { content };
-                IHTMLDocument2 oMyDoc = doc as IHTMLDocument2;
-                oMyDoc.write(oPageText);
+                //Console.WriteLine(content);
+                doc.LoadHtml(content);
+                
 
                 stream.Close();
                 streamReader.Close();
