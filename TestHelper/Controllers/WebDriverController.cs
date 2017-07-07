@@ -12,7 +12,7 @@ using TestHelper.Models;
 using System.Windows;
 using System.Xml.XPath;
 using System.Web;
-using HtmlAgilityPack;
+
 
 namespace TestHelper.Controllers
 {
@@ -38,7 +38,10 @@ namespace TestHelper.Controllers
             try
             {
                 HtmlDocument doc = WebDocumentParser(url);
-                HtmlNodeCollection nodeCol = doc.DocumentNode.SelectNodes("//script");
+
+                HtmlNode specificNode = doc.GetElementById("nodeId");
+
+                HtmlNodeCollection nodeCol = doc.DocumentNode.InnerHtml.("html").SelectNodes("//script");
 
                 foreach (HtmlNode node in nodeCol)
                 {
@@ -46,8 +49,6 @@ namespace TestHelper.Controllers
                     {
                         if (node.Attributes["src"].Value.Contains("gnb.min.js") || node.Attributes["src"].Value.Contains("gnb.js"))
                         {
-                            Console.WriteLine(gnbPageInfo.Name);
-                            Console.WriteLine(node.OuterHtml);
                             if (node.Attributes["data-gamecode"] != null)
                             {
                                 gnbPageInfo.Code = node.Attributes["data-gamecode"].Value;
@@ -100,15 +101,30 @@ namespace TestHelper.Controllers
 
             try
             {
+                //WebClient webClient = new WebClient();
+                //Stream stream = webClient.OpenRead(url);
+                //StreamReader streamReader = new StreamReader(stream, Encoding.UTF8);
+                //string content = streamReader.ReadToEnd();
+                //doc.LoadHtml(content);
+
+                //stream.Close();
+                //streamReader.Close();
+                string content = string.Empty;
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
+                //ASCIIEncoding encoding = new ASCIIEncoding();
+                //byte[] byte1 = encoding.GetBytes(postData);
+                //request.UserAgent = ".NET Framework Application";
+                request.Method = "GET";
+                request.ContentType = "text/xml";
+
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                
+
                 Stream stream = response.GetResponseStream();
                 StreamReader streamReader = new StreamReader(stream, Encoding.UTF8);
-                string content = streamReader.ReadToEnd();
-                //Console.WriteLine(content);
+                content = streamReader.ReadToEnd();
+
                 doc.LoadHtml(content);
-                
+
 
                 stream.Close();
                 streamReader.Close();
