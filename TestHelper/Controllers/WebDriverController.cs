@@ -18,17 +18,37 @@ namespace TestHelper.Controllers
 {
     public class WebDriverController
     {
-        public void GnbCheck(ObservableCollection<GNBPageInfo> gnbPageInfoList)
+        private bool status = false;
+        private int statusCode = -1;
+        private string exceptionName;
+        private int errorCount = 0;
+
+        public int GnbCheck(ObservableCollection<GNBPageInfo> gnbPageInfoList)
         {
             foreach (GNBPageInfo item in gnbPageInfoList)
             {
                 if (item.IsChecked)
                 {
+                    statusCode = -1;
+
                     GNBPageInfo tmp = new GNBPageInfo();
                     tmp = item;
                     GnbCheck(tmp);
+
+                    item.Status = status;
+
+                    if (statusCode == -1)
+                    {
+                        item.StatusReason = exceptionName;
+                    }
+                    else
+                    {
+                        item.StatusReason = statusCode.ToString();
+                    }
                 }
             }
+
+            return errorCount;
         }
 
         private GNBPageInfo GnbCheck(GNBPageInfo gnbPageInfo)
@@ -38,64 +58,68 @@ namespace TestHelper.Controllers
             try
             {
                 HtmlDocument doc = WebDocumentParser(url);
-                HtmlNodeCollection nodeCol = doc.DocumentNode.SelectNodes("//script");
 
-                foreach (HtmlNode node in nodeCol)
+                if (doc != null)
                 {
-                    if (node.Attributes["src"] != null)
+                    HtmlNodeCollection nodeCol = doc.DocumentNode.SelectNodes("//script");
+
+                    if (nodeCol != null)
                     {
-                        if (node.Attributes["src"].Value.Contains("gnb.min.js") || node.Attributes["src"].Value.Contains("gnb.js"))
+                        foreach (HtmlNode node in nodeCol)
                         {
-                            if (node.Attributes["data-gamecode"] != null)
+                            if (node.Attributes["src"] != null)
                             {
-                                gnbPageInfo.Code = node.Attributes["data-gamecode"].Value;
-                            }
-                            if (node.Attributes["data-ispchub"] != null)
-                            {
-                                if (node.Attributes["data-ispchub"].Value == "true")
+                                if (node.Attributes["src"].Value.Contains("gnb.min.js") || node.Attributes["src"].Value.Contains("gnb.js"))
                                 {
-                                    gnbPageInfo.IsPCHub = true;
+                                    if (node.Attributes["data-gamecode"] != null)
+                                    {
+                                        gnbPageInfo.Code = node.Attributes["data-gamecode"].Value;
+                                    }
+                                    if (node.Attributes["data-ispchub"] != null)
+                                    {
+                                        if (node.Attributes["data-ispchub"].Value == "true")
+                                        {
+                                            gnbPageInfo.IsPCHub = true;
+                                        }
+                                        else if ((node.Attributes["data-ispchub"].Value == "false"))
+                                        {
+                                            gnbPageInfo.IsPCHub = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        gnbPageInfo.IsPCHub = true;
+                                    }
+                                    if (node.Attributes["data-ismybanner"] != null)
+                                    {
+                                        if (node.Attributes["data-ismybanner"].Value == "true")
+                                        {
+                                            gnbPageInfo.IsMyBanner = true;
+                                        }
+                                        else if ((node.Attributes["data-ismybanner"].Value == "false"))
+                                        {
+                                            gnbPageInfo.IsMyBanner = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        gnbPageInfo.IsMyBanner = true;
+                                    }
                                 }
-                                else if ((node.Attributes["data-ispchub"].Value == "false"))
+                                else if (node.Attributes["src"].Value.Contains("ngb_head.js") || node.Attributes["src"].Value.Contains("playlog.min.js") || node.Attributes["src"].Value.Contains("playlog.mobile.min.js"))
                                 {
-                                    gnbPageInfo.IsPCHub = false;
+                                    gnbPageInfo.IsCheckedA2S = true;
                                 }
                             }
-                            else
-                            {
-                                gnbPageInfo.IsPCHub = true;
-                            }
-                            if (node.Attributes["data-ismybanner"] != null)
-                            {
-                                if (node.Attributes["data-ismybanner"].Value == "true")
-                                {
-                                    gnbPageInfo.IsMyBanner = true;
-                                }
-                                else if ((node.Attributes["data-ismybanner"].Value == "false"))
-                                {
-                                    gnbPageInfo.IsMyBanner = false;
-                                }
-                            }
-                            else
-                            {
-                                gnbPageInfo.IsMyBanner = true;
-                            }
-                        }
-                        else if (node.Attributes["src"].Value.Contains("ngb_head.js"))
-                        {
-                            gnbPageInfo.IsCheckedA2S = true;
-                        }
-                        else if (node.Attributes["src"].Value.Contains("gnb_ext.js"))
-                        {
-                            gnbPageInfo.IsCheckedA2S = true;
                         }
                     }
-                    Console.WriteLine(gnbPageInfo.Url);
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message + e.Data, "Error - GnbCheck", MessageBoxButton.OK, MessageBoxImage.Error);
+                status = false;
+                errorCount++;
+                exceptionName = e.GetType().Name + " : \r\n" + e.Message;
             }
 
             return gnbPageInfo;
@@ -113,9 +137,16 @@ namespace TestHelper.Controllers
                 request.UserAgent = ".NET Framework Application";
                 request.Method = "GET";
                 request.ContentType = "text/xml";
+                request.Timeout = 1000;
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    status = true;
+                }
+                statusCode = HttpStatusCode.OK.GetHashCode();
+                Console.WriteLine(response.StatusCode.GetHashCode());
                 Stream stream = response.GetResponseStream();
                 StreamReader streamReader = new StreamReader(stream, Encoding.UTF8);
                 content = streamReader.ReadToEnd();
@@ -127,13 +158,11 @@ namespace TestHelper.Controllers
                 streamReader.Close();
                 response.Close();
             }
-            catch (WebException e)
-            {
-                MessageBox.Show(e.Message + e.Data, "Error - WebEcveption", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message + e.Data, "Error - WebDocumentParser", MessageBoxButton.OK, MessageBoxImage.Error);
+                status = false;
+                errorCount++;
+                exceptionName = e.GetType().Name + " : \r\n" + e.Message;
             }
 
             return doc;

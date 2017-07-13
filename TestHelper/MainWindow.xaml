@@ -7,7 +7,7 @@
         xmlns:model="clr-namespace:TestHelper.Models"
         xmlns:control="clr-namespace:TestHelper.Controllers"
         mc:Ignorable="d"
-        Title="Moroo | TestHelper" Height="600" Width="900" Icon="Resources/Sign_Icon.ico" Loaded="Window_Loaded">
+        Title="Moroo | TestHelper" Height="600" Width="1000" Icon="Resources/Sign_Icon.ico" Loaded="Window_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -135,22 +135,25 @@
                                     </GridViewColumnHeader>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Width="20" Height="20">
-                                                <Image.Style>
-                                                    <Style TargetType="Image">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Status}" Value="True">
-                                                                <Setter Property="Source" Value="Resources/StatusOK.ico" />
-                                                                <Setter Property="ToolTip" Value="성공" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Status}" Value="False">
-                                                                <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
-                                                                <Setter Property="ToolTip" Value="실패" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Image.Style>
-                                            </Image>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Name="Status_Image" Width="20" Height="20" ToolTip="{Binding StatusReason}">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Status}" Value="True">
+                                                                    <Setter Property="Source" Value="Resources/StatusOK.ico" />
+                                                                    <Setter Property="ToolTip" Value="성공" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Status}" Value="False">
+                                                                    <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
+                                                                    <Setter Property="ToolTip" Value="실패" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                                <!--<TextBlock Name="Status_TextBlock" Text="{Binding StatusReason}"/>-->
+                                            </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -231,7 +234,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn>
+                                <GridViewColumn Width="40">
                                     <GridViewColumnHeader>
                                         <TextBlock Text="A2S" ToolTip="A2S 스크립트 적용 여부" />
                                     </GridViewColumnHeader>

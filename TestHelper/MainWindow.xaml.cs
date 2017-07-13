@@ -18,7 +18,6 @@ using System.Windows.Shapes;
 using TestHelper.Controllers;
 using TestHelper.Models;
 using System.Collections.ObjectModel;
-using System.Windows;
 using TestHelper.Windows.Inspection;
 using System.ComponentModel;
 using System.Globalization;
@@ -34,17 +33,11 @@ namespace TestHelper
         WebDriverController webDriverController = new WebDriverController();
         ObservableCollection<InspectionPageInfo> inspectionPageInfoList = null;
         ObservableCollection<GNBPageInfo> gnbPageInfoList = null;
-        bool sd = false;
 
         public MainWindow()
         {
             xmlController.FileCheck();
             InitializeComponent();
-        }
-
-        private void InspectionPageInfoList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            sd = true;
         }
 
         private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
@@ -216,7 +209,6 @@ namespace TestHelper
             if (listViewItem.IsSelected)
             {
                 GNBPageInfo item = listViewItem.DataContext as GNBPageInfo;
-                Console.WriteLine(item.IsChecked);
             }
         }
 
@@ -224,14 +216,12 @@ namespace TestHelper
         {
             CheckBox ckb = sender as CheckBox;
             GNBPageInfo item = ckb.DataContext as GNBPageInfo;
-            Console.WriteLine(item.IsChecked);
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             CheckBox ckb = sender as CheckBox;
             GNBPageInfo item = ckb.DataContext as GNBPageInfo;
-            Console.WriteLine(item.IsChecked);
         }
 
         private void Header_CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -272,7 +262,12 @@ namespace TestHelper
                     }
                 case 1:
                     {
-                        webDriverController.GnbCheck(gnbPageInfoList);
+                        int errorCount = webDriverController.GnbCheck(gnbPageInfoList);
+
+                        if (errorCount > 0)
+                        {
+                            MessageBox.Show("GNB 체크 중에 에러가 발생하였습니다.\r\n자세한 사항은 Status의 Tooltip을 확인하세요.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                         break;
                     }
             }

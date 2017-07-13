@@ -28,6 +28,7 @@ namespace TestHelper.Models
         private bool _isChecked = false;
         private Category _category = Category.None;
         private bool _status = false;
+        private string _statusReason = "Not Connected";
         private string _name = string.Empty;
         private string _url = string.Empty;
         private string _code = string.Empty;
@@ -71,6 +72,19 @@ namespace TestHelper.Models
             {
                 _status = value;
                 this.OnPropertyChanged("Status");
+            }
+        }
+
+        public string StatusReason
+        {
+            get
+            {
+                return _statusReason;
+            }
+            set
+            {
+                _statusReason = value;
+                this.OnPropertyChanged("StatusReason");
             }
         }
 
