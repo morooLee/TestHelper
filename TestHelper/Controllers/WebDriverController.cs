@@ -12,7 +12,7 @@ using TestHelper.Models;
 using System.Windows;
 using System.Xml.XPath;
 using System.Web;
-
+using HtmlAgilityPack;
 
 namespace TestHelper.Controllers
 {
@@ -38,10 +38,7 @@ namespace TestHelper.Controllers
             try
             {
                 HtmlDocument doc = WebDocumentParser(url);
-
-                HtmlNode specificNode = doc.GetElementById("nodeId");
-
-                HtmlNodeCollection nodeCol = doc.DocumentNode.InnerHtml.("html").SelectNodes("//script");
+                HtmlNodeCollection nodeCol = doc.DocumentNode.SelectNodes("//script");
 
                 foreach (HtmlNode node in nodeCol)
                 {
@@ -84,7 +81,16 @@ namespace TestHelper.Controllers
                                 gnbPageInfo.IsMyBanner = true;
                             }
                         }
+                        else if (node.Attributes["src"].Value.Contains("ngb_head.js"))
+                        {
+                            gnbPageInfo.IsCheckedA2S = true;
+                        }
+                        else if (node.Attributes["src"].Value.Contains("gnb_ext.js"))
+                        {
+                            gnbPageInfo.IsCheckedA2S = true;
+                        }
                     }
+                    Console.WriteLine(gnbPageInfo.Url);
                 }
             }
             catch (Exception e)
@@ -101,19 +107,10 @@ namespace TestHelper.Controllers
 
             try
             {
-                //WebClient webClient = new WebClient();
-                //Stream stream = webClient.OpenRead(url);
-                //StreamReader streamReader = new StreamReader(stream, Encoding.UTF8);
-                //string content = streamReader.ReadToEnd();
-                //doc.LoadHtml(content);
-
-                //stream.Close();
-                //streamReader.Close();
                 string content = string.Empty;
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
-                //ASCIIEncoding encoding = new ASCIIEncoding();
-                //byte[] byte1 = encoding.GetBytes(postData);
-                //request.UserAgent = ".NET Framework Application";
+
+                request.UserAgent = ".NET Framework Application";
                 request.Method = "GET";
                 request.ContentType = "text/xml";
 
