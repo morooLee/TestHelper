@@ -124,7 +124,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="40" DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource IndexConverter}}">
+                                <GridViewColumn Width="35" DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource IndexConverter}}">
                                     <GridViewColumnHeader>
                                         <TextBlock Text="#" ToolTip="인덱스" />
                                     </GridViewColumnHeader>
@@ -142,11 +142,9 @@
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding Status}" Value="True">
                                                                     <Setter Property="Source" Value="Resources/StatusOK.ico" />
-                                                                    <Setter Property="ToolTip" Value="성공" />
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding Status}" Value="False">
                                                                     <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
-                                                                    <Setter Property="ToolTip" Value="실패" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -216,11 +214,61 @@
                                 </GridViewColumn>
                                 <GridViewColumn>
                                     <GridViewColumnHeader>
+                                        <TextBlock Text="GNB 유무" ToolTip="GNB 적용 여부" />
+                                    </GridViewColumnHeader>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Name="HasGNB_Image" Width="20" Height="20">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=HasGNB}" Value="True">
+                                                                    <Setter Property="Source" Value="Resources/StatusOK.ico" />
+                                                                    <Setter Property="ToolTip" Value="적용" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=HasGNB}" Value="False">
+                                                                    <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
+                                                                    <Setter Property="ToolTip" Value="미 적용" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=HasGNB}" Value="{x:Null}">
+                                                                    <Setter Property="Source" Value="Resources/StatusHelp.ico" />
+                                                                    <Setter Property="ToolTip" Value="알수 없음" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                                <!--<TextBlock Name="Status_TextBlock" Text="{Binding StatusReason}"/>-->
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=HasGNB}" ToolTip="{Binding Path=HasGNB}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>-->
+                                </GridViewColumn>
+                                <GridViewColumn>
+                                    <GridViewColumnHeader>
                                         <TextBlock Text="PC방 혜택" ToolTip="PC방 혜택 사용여부" />
                                     </GridViewColumnHeader>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=IsPCHub}" ToolTip="{Binding Path=IsPCHub}" />
+                                            <TextBlock Text="{Binding Path=IsPCHub}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Path=IsPCHub}" Value="True">
+                                                                <Setter Property="ToolTip" Value="적용" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Path=IsPCHub}" Value="False">
+                                                                <Setter Property="ToolTip" Value="미 적용" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -230,7 +278,20 @@
                                     </GridViewColumnHeader>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=IsMyBanner}" ToolTip="{Binding Path=IsMyBanner}" />
+                                            <TextBlock Text="{Binding Path=IsMyBanner}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Path=IsMyBanner}" Value="True">
+                                                                <Setter Property="ToolTip" Value="적용" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Path=IsMyBanner}" Value="False">
+                                                                <Setter Property="ToolTip" Value="미 적용" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -240,7 +301,20 @@
                                     </GridViewColumnHeader>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=IsCheckedA2S}" ToolTip="{Binding Path=IsCheckedA2S}" />
+                                            <TextBlock Text="{Binding Path=IsCheckedA2S}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Path=IsCheckedA2S}" Value="True">
+                                                                <Setter Property="ToolTip" Value="적용" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Path=IsCheckedA2S}" Value="False">
+                                                                <Setter Property="ToolTip" Value="미 적용" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

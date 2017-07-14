@@ -31,6 +31,7 @@ namespace TestHelper.Models
         private string _statusReason = "Not Connected";
         private string _name = string.Empty;
         private string _url = string.Empty;
+        private bool? _hasGNB = null;
         private string _code = string.Empty;
         private bool? _ispchub = null;
         private bool? _ismybanner = null;
@@ -111,6 +112,19 @@ namespace TestHelper.Models
             {
                 _url = value;
                 this.OnPropertyChanged("Url");
+            }
+        }
+
+        public bool? HasGNB
+        {
+            get
+            {
+                return _hasGNB;
+            }
+            set
+            {
+                _hasGNB = value;
+                this.OnPropertyChanged("HasGNB");
             }
         }
 

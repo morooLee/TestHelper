@@ -251,7 +251,7 @@ namespace TestHelper
             
         }
 
-        private void Action_Menu_Click(object sender, RoutedEventArgs e)
+        private async void Action_Menu_Click(object sender, RoutedEventArgs e)
         {
             switch (Tab_Control.SelectedIndex)
             {
@@ -262,7 +262,7 @@ namespace TestHelper
                     }
                 case 1:
                     {
-                        int errorCount = webDriverController.GnbCheck(gnbPageInfoList);
+                        int errorCount = await webDriverController.GnbCheck(gnbPageInfoList);
 
                         if (errorCount > 0)
                         {
