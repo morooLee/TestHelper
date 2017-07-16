@@ -63,10 +63,40 @@ namespace TestHelper.Properties {
         /// <summary>
         ///   (아이콘)과(와) 유사한 System.Drawing.Icon 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Icon Action {
+            get {
+                object obj = ResourceManager.GetObject("Action", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap Checkmark_32x {
+            get {
+                object obj = ResourceManager.GetObject("Checkmark_32x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   (아이콘)과(와) 유사한 System.Drawing.Icon 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Icon Download_grey {
             get {
                 object obj = ResourceManager.GetObject("Download_grey", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap Question_32xLG {
+            get {
+                object obj = ResourceManager.GetObject("Question_32xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -76,6 +106,16 @@ namespace TestHelper.Properties {
         internal static System.Drawing.Icon Refresh_grey {
             get {
                 object obj = ResourceManager.GetObject("Refresh_grey", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   (아이콘)과(와) 유사한 System.Drawing.Icon 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Icon Save {
+            get {
+                object obj = ResourceManager.GetObject("Save", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -116,6 +156,16 @@ namespace TestHelper.Properties {
         internal static System.Drawing.Icon StatusHelp {
             get {
                 object obj = ResourceManager.GetObject("StatusHelp", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   (아이콘)과(와) 유사한 System.Drawing.Icon 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Icon StatusOffline_stop {
+            get {
+                object obj = ResourceManager.GetObject("StatusOffline_stop", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

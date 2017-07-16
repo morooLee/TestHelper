@@ -52,6 +52,11 @@ namespace TestHelper.Controllers
                     if (statusCode == -1)
                     {
                         item.StatusReason = exceptionName;
+                        //item.Code = null;
+                        item.HasGNB = null;
+                        item.IsPCHub = null;
+                        item.IsMyBanner = null;
+                        item.IsCheckedA2S = null;
                     }
                     else
                     {
@@ -65,14 +70,13 @@ namespace TestHelper.Controllers
 
         private async Task<GNBPageInfo> GnbCheck(GNBPageInfo gnbPageInfo)
         {
-            string url = gnbPageInfo.Url;
-
             try
             {
-                HtmlDocument doc = await WebDocumentParser(url);
+                HtmlDocument doc = await WebDocumentParser(gnbPageInfo.Url, gnbPageInfo.Name);
 
                 if (doc != null)
                 {
+                    bool isCheckedA2S = false;
                     HtmlNodeCollection nodeCol = doc.DocumentNode.SelectNodes("//script");
 
                     if (nodeCol != null)
@@ -87,7 +91,10 @@ namespace TestHelper.Controllers
 
                                     if (node.Attributes["data-gamecode"] != null)
                                     {
-                                        gnbPageInfo.Code = node.Attributes["data-gamecode"].Value;
+                                        if (gnbPageInfo.Code != node.Attributes["data-gamecode"].Value)
+                                        {
+                                            gnbPageInfo.Code = node.Attributes["data-gamecode"].Value;
+                                        }
                                     }
                                     if (node.Attributes["data-ispchub"] != null)
                                     {
@@ -119,19 +126,14 @@ namespace TestHelper.Controllers
                                     {
                                         gnbPageInfo.IsMyBanner = true;
                                     }
-
-                                    if (node.Attributes["src"].Value.Contains("ngb_head.js") || node.Attributes["src"].Value.Contains("playlog.min.js") || node.Attributes["src"].Value.Contains("playlog.mobile.min.js"))
-                                    {
-                                        gnbPageInfo.IsCheckedA2S = true;
-                                    }
                                 }
                                 else if (node.Attributes["src"].Value.Contains("ngb_head.js") || node.Attributes["src"].Value.Contains("playlog.min.js") || node.Attributes["src"].Value.Contains("playlog.mobile.min.js"))
                                 {
-                                    gnbPageInfo.IsCheckedA2S = true;
+                                    isCheckedA2S = true;
                                 }
                                 else if (node.Attributes["src"].Value.Contains("adjustPath.js"))
                                 {
-                                    HtmlDocument subDoc = await WebDocumentParser(@"http://help.nexon.com" + node.Attributes["src"].Value);
+                                    HtmlDocument subDoc = await WebDocumentParser(@"http://help.nexon.com" + node.Attributes["src"].Value, gnbPageInfo.Name);
                                     string[] sprits = subDoc.DocumentNode.InnerHtml.Split(' ');
 
                                     foreach (string item in sprits)
@@ -146,7 +148,10 @@ namespace TestHelper.Controllers
                                         {
                                             if (System.Text.RegularExpressions.Regex.IsMatch(item, @"\D"))
                                             {
-                                                gnbPageInfo.Code = System.Text.RegularExpressions.Regex.Replace(item, @"\D", "");
+                                                if (gnbPageInfo.Code != System.Text.RegularExpressions.Regex.Replace(item, @"\D", ""))
+                                                {
+                                                    gnbPageInfo.Code = System.Text.RegularExpressions.Regex.Replace(item, @"\D", "");
+                                                }
                                             }
                                         }
                                         else if (item.Contains("data-ispchub'"))
@@ -186,17 +191,21 @@ namespace TestHelper.Controllers
                                     }
 
                                 }
-                                Console.WriteLine(node.Attributes["src"].Value);
                             }
                         }
                         if (gnbPageInfo.HasGNB != true)
                         {
+                            //gnbPageInfo.Code = null;
                             gnbPageInfo.HasGNB = false;
+                            gnbPageInfo.IsPCHub = false;
+                            gnbPageInfo.IsMyBanner = false;
                         }
+                        gnbPageInfo.IsCheckedA2S = isCheckedA2S;
+
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 throw;
             }
@@ -204,7 +213,7 @@ namespace TestHelper.Controllers
             return gnbPageInfo;
         }
 
-        private async Task<HtmlDocument> WebDocumentParser(string url)
+        private async Task<HtmlDocument> WebDocumentParser(string url, string name)
         {
             HtmlDocument doc = new HtmlDocument();
 
@@ -220,16 +229,27 @@ namespace TestHelper.Controllers
 
                 WebResponse response = await request.GetResponseAsync();
 
+                if (new Uri(url).Host != response.ResponseUri.Host)
+                {
+                    if (response.ResponseUri.Host == "bulletin.nexon.com")
+                    {
+                        MessageBox.Show(new Uri(url) + "\r\n페이지가 삭제되었거나 접근할 수 없습니다.", "Error - " + name, MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show(new Uri(url) + " 에서\r\n" + response.ResponseUri + " 로 이동되었습니다.", "Error - " + name, MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    throw new HttpListenerException(1355);
+                }
+
                 if (((HttpWebResponse)response).StatusCode == HttpStatusCode.OK)
                 {
                     status = true;
                 }
                 statusCode = HttpStatusCode.OK.GetHashCode();
-                Console.WriteLine(((HttpWebResponse)response).StatusCode.GetHashCode());
                 Stream stream = response.GetResponseStream();
                 StreamReader streamReader = new StreamReader(stream, Encoding.UTF8);
                 content = streamReader.ReadToEnd();
-
                 doc.LoadHtml(content);
 
 
@@ -237,7 +257,7 @@ namespace TestHelper.Controllers
                 streamReader.Close();
                 response.Close();
             }
-            catch (Exception e)
+            catch
             {
                 throw;
                 //status = false;

@@ -87,6 +87,9 @@
     </ApplicationDefinition>
     <Compile Include="Controllers\IndexConverter.cs" />
     <Compile Include="Models\GNBPageInfoListViewModel.cs" />
+    <Compile Include="Windows\GNB\GNBEditWindow.xaml.cs">
+      <DependentUpon>GNBEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Inspection\InspectionDetailWindow.xaml.cs">
       <DependentUpon>InspectionDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -107,6 +110,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\GNB\GNBEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\Inspection\InspectionDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,6 +190,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\StatusHelp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Action.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Save.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Checkmark_32x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\StatusOffline_stop.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Question_32xLG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

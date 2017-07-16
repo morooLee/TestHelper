@@ -31,11 +31,12 @@ namespace TestHelper.Models
         private string _statusReason = "Not Connected";
         private string _name = string.Empty;
         private string _url = string.Empty;
-        private bool? _hasGNB = null;
         private string _code = string.Empty;
-        private bool? _ispchub = null;
-        private bool? _ismybanner = null;
+        private bool? _hasGNB = null;
+        private bool? _isPCHub = null;
+        private bool? _isMyBanner = null;
         private bool? _isCheckedA2S = null;
+        private bool _isChanged = false;
 
         public bool IsChecked
         {
@@ -115,19 +116,6 @@ namespace TestHelper.Models
             }
         }
 
-        public bool? HasGNB
-        {
-            get
-            {
-                return _hasGNB;
-            }
-            set
-            {
-                _hasGNB = value;
-                this.OnPropertyChanged("HasGNB");
-            }
-        }
-
         public string Code
         {
             get
@@ -141,15 +129,28 @@ namespace TestHelper.Models
             }
         }
 
+        public bool? HasGNB
+        {
+            get
+            {
+                return _hasGNB;
+            }
+            set
+            {
+                _hasGNB = value;
+                this.OnPropertyChanged("HasGNB");
+            }
+        }
+
         public bool? IsPCHub
         {
             get
             {
-                return _ispchub;
+                return _isPCHub;
             }
             set
             {
-                _ispchub = value;
+                _isPCHub = value;
                 this.OnPropertyChanged("IsPCHub");
             }
         }
@@ -158,11 +159,11 @@ namespace TestHelper.Models
         {
             get
             {
-                return _ismybanner;
+                return _isMyBanner;
             }
             set
             {
-                _ismybanner = value;
+                _isMyBanner = value;
                 this.OnPropertyChanged("IsMyBanner");
             }
         }
@@ -178,6 +179,35 @@ namespace TestHelper.Models
                 _isCheckedA2S = value;
                 this.OnPropertyChanged("IsCheckedA2S");
             }
+        }
+
+        public bool IsChanged
+        {
+            get
+            {
+                return _isChanged;
+            }
+            set
+            {
+                _isChanged = value;
+                this.OnPropertyChanged("IsChanged");
+            }
+        }
+
+        public void Clone(GNBPageInfo orginal)
+        {
+            this.IsChecked = orginal.IsChecked;
+            this.Category = orginal.Category;
+            this.Status = orginal.Status;
+            this.StatusReason = orginal.StatusReason;
+            this.Name = orginal.Name;
+            this.Url = orginal.Url;
+            this.Code = orginal.Code;
+            this.HasGNB = orginal.HasGNB;
+            this.IsPCHub = orginal.IsPCHub;
+            this.IsMyBanner = orginal.IsMyBanner;
+            this.IsCheckedA2S = orginal.IsCheckedA2S;
+            this.IsChanged = orginal.IsChanged;
         }
 
         public override string ToString()

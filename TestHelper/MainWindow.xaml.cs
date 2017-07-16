@@ -21,6 +21,7 @@ using System.Collections.ObjectModel;
 using TestHelper.Windows.Inspection;
 using System.ComponentModel;
 using System.Globalization;
+using TestHelper.Windows.GNB;
 
 namespace TestHelper
 {
@@ -33,6 +34,8 @@ namespace TestHelper
         WebDriverController webDriverController = new WebDriverController();
         ObservableCollection<InspectionPageInfo> inspectionPageInfoList = null;
         ObservableCollection<GNBPageInfo> gnbPageInfoList = null;
+        bool isOpened_Category_ContextMenu = false;
+        bool isSorted_Category = false;
 
         public MainWindow()
         {
@@ -107,7 +110,10 @@ namespace TestHelper
             {
                 statusBar.Items.RemoveAt(0);
             }
-            statusBar.Items.Add(obj);
+            if (obj != null)
+            {
+                statusBar.Items.Add(obj);
+            }
         }
 
         private void Refresh_Menu_Click(object sender, RoutedEventArgs e)
@@ -200,7 +206,12 @@ namespace TestHelper
 
         private void GNBListItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("클릭 ");
+            GNBPageInfo item = ((ListViewItem)sender).DataContext as GNBPageInfo;
+            GNBEditWindow gnbEditWindow = new GNBEditWindow(item);
+            gnbEditWindow.Owner = Application.Current.MainWindow;
+            gnbEditWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            gnbEditWindow.ShowDialog();
+
         }
 
         private void GNBListItem_MouseUp(object sender, RoutedEventArgs e)
@@ -246,11 +257,6 @@ namespace TestHelper
             }
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private async void Action_Menu_Click(object sender, RoutedEventArgs e)
         {
             switch (Tab_Control.SelectedIndex)
@@ -266,7 +272,7 @@ namespace TestHelper
 
                         if (errorCount > 0)
                         {
-                            MessageBox.Show("GNB 체크 중에 에러가 발생하였습니다.\r\n자세한 사항은 Status의 Tooltip을 확인하세요.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("GNB 체크 중에 에러가 발생하였습니다.\r\n자세한 사항은 상태 항목의 Tooltip을 확인하세요.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         break;
                     }
@@ -280,14 +286,126 @@ namespace TestHelper
                 case 0:
                     {
                         Action_MenuItem.Visibility = Visibility.Hidden;
+                        Save_MenuItem.Visibility = Visibility.Hidden;
+                        StatusBarItemChange(Inspection_WebBrowser.Source);
                         break;
                     }
                 case 1:
                     {
                         Action_MenuItem.Visibility = Visibility.Visible;
+                        Save_MenuItem.Visibility = Visibility.Visible;
+                        GNBChangedStatusBar();
+                        //StatusBarItemChange(GNBPageInfoList_ListView.SelectedItem);
+                        Console.WriteLine("SelectionChanged");
                         break;
                     }
             }
+        }
+
+        private void GNBChangedStatusBar()
+        {
+            GNBPageInfo item = GNBPageInfoList_ListView.SelectedItem as GNBPageInfo;
+            string status = string.Empty;
+            if (item != null)
+            {
+                status = item.Name + " | " + item.Url;
+            }
+            StatusBarItemChange(status);
+        }
+
+        private void Save_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            bool isSaved = xmlController.SetGNBList(gnbPageInfoList);
+
+            if (isSaved)
+            {
+                foreach (GNBPageInfo item in GNBPageInfoList_ListView.Items)
+                {
+                    if(item.IsChanged)
+                    {
+                        item.IsChanged = false;
+                    }
+                }
+                MessageBox.Show("저장되었습니다.", "Save", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void Category_Header_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Category_ContextMenu.IsOpen = true;
+        }
+
+        private void Category_ContextMenu_Closed(object sender, RoutedEventArgs e)
+        {
+            Category_TextBlock.Text = "카테고리 ▼";
+        }
+
+        private void Category_ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            Category_TextBlock.Text = "카테고리 ▲";
+        }
+
+        private void CategoryAll_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            isSorted_Category = false;
+
+        }
+
+        private void Common_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            isSorted_Category = true;
+            //gnbPageInfoList.ToList().Sort
+        }
+
+        private void PCOnline_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            isSorted_Category = true;
+        }
+
+        private void Mobile_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            isSorted_Category = true;
+        }
+
+        private void GameCode_TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;
+            GNBPageInfo gnb = textBlock.DataContext as GNBPageInfo;
+            gnb.IsChanged = true;
+
+            if (textBlock.Text == string.Empty)
+            {
+                textBlock.ToolTip = textBlock.Tag + " > 비어있음" ;
+                textBlock.Tag = "비어있음";
+            }
+            else
+            {
+                textBlock.ToolTip = textBlock.Tag + " > " + textBlock.Text;
+                textBlock.Tag = textBlock.Text;
+            }
+            
+        }
+
+        private void GameCode_TextBlock_Loaded(object sender, RoutedEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;
+            
+            if (textBlock.Text == string.Empty)
+            {
+                textBlock.Tag = "비어있음";
+                textBlock.ToolTip = "비어있음";
+            }
+            else
+            {
+                textBlock.Tag = textBlock.Text;
+                textBlock.ToolTip = textBlock.Text;
+            }
+        }
+
+        private void GNBPageInfoList_ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            GNBChangedStatusBar();
+            e.Handled = true;
         }
     }
 }
