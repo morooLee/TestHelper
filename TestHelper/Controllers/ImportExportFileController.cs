@@ -203,7 +203,7 @@ namespace TestHelper.Controllers
         {
             ObservableCollection<GNBPageInfo> gnbPageInfoList = new ObservableCollection<GNBPageInfo>();
 
-            DoImport("csv");
+            DoImport(gnbPageInfoList, "csv");
 
             return gnbPageInfoList;
         }
@@ -212,16 +212,16 @@ namespace TestHelper.Controllers
         {
             ObservableCollection<GNBPageInfo> gnbPageInfoList = new ObservableCollection<GNBPageInfo>();
 
-            DoImport("txt");
+            DoImport(gnbPageInfoList, "txt");
 
             return gnbPageInfoList;
         }
 
-        private ObservableCollection<GNBPageInfo> DoImport(string fileExtension)
+        private ObservableCollection<GNBPageInfo> DoImport(ObservableCollection<GNBPageInfo> gnbPageInfoList, string fileExtension)
         {
-            ObservableCollection<GNBPageInfo> gnbPageInfoList = new ObservableCollection<GNBPageInfo>();
-
             string separator = string.Empty;
+            string fileName = string.Empty;
+            string path = string.Empty;
 
             if (fileExtension == "txt")
             {
@@ -241,6 +241,67 @@ namespace TestHelper.Controllers
             dialog.Filter = fileExtension.ToUpper() + " (*." + fileExtension + ") | *." + fileExtension + "; | 모든 파일 (*.*) | *.*";
 
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                fileName = dialog.SafeFileName;
+                path = dialog.FileName;
+
+                try
+                {
+                    FileStream fileStream = new FileStream(path, FileMode.Open);
+                    StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8, false);
+
+                    string fileContents = null;
+                    string[] list = null;
+                    string[] properties = null;
+
+                    fileContents = streamReader.ReadToEnd();
+
+                    if (string.IsNullOrEmpty(fileContents) == false)
+                    {
+                        list = fileContents.Split('\n');
+
+                        for (int i = 1; i < list.Length; i++)
+                        {
+                            GNBPageInfo tmp = new GNBPageInfo();
+                            properties = list[i].Split(Convert.ToChar(fileExtension));
+
+                            if (properties[1] == "공통 페이지")
+                            {
+                                tmp.Category = Category.Common;
+                            }
+                            else if (properties[1] == "온라인 게임")
+                            {
+                                tmp.Category = Category.PCOnline;
+                            }
+                            else if (properties[1] == "모바일 게임")
+                            {
+                                tmp.Category = Category.Mobile;
+                            }
+                            else
+                            {
+                                tmp.Category = Category.Common;
+                            }
+
+                            tmp.Name = properties[2];
+                            tmp.Url = properties[3];
+                            tmp.Code = properties[4];
+                            tmp.HasGNB = properties[5] == "" ? (bool?)null : Convert.ToBoolean(properties[5]);
+                            tmp.IsPCHub = properties[6] == "" ? (bool?)null : Convert.ToBoolean(properties[6]);
+                            tmp.IsMyBanner = properties[7] == "" ? (bool?)null : Convert.ToBoolean(properties[7]);
+                            tmp.IsCheckedA2S = properties[8] == "" ? (bool?)null : Convert.ToBoolean(properties[8]);
+
+                            gnbPageInfoList.Add(tmp);
+                        }
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
 
             return gnbPageInfoList;
         }

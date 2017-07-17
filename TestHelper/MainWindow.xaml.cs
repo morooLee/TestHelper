@@ -458,7 +458,8 @@ namespace TestHelper
 
         private void ImportCSV_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            importExportFileController.ImportToCSV();
+            ObservableCollection<GNBPageInfo> tmpList = null;
+            tmpList = importExportFileController.ImportToCSV();
         }
 
         private void ImportXLS_MenuItem_Click(object sender, RoutedEventArgs e)
@@ -468,7 +469,8 @@ namespace TestHelper
 
         private void ImportTXT_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            importExportFileController.ImportToTXT();
+            ObservableCollection<GNBPageInfo> tmpList = null;
+            tmpList = importExportFileController.ImportToTXT();
         }
     }
 }
