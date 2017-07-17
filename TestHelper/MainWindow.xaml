@@ -24,12 +24,22 @@
                 
             </Menu>
             <Menu Grid.Column="1" HorizontalAlignment="Right">
+                <MenuItem Name="Action_MenuItem" Click="Action_Menu_Click">
+                    <MenuItem.Header>
+                        <Image Source="Resources/Action.ico" Name="Action_Button" Margin="0,2,0,2" ToolTip="실행" />
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem Name="Save_MenuItem" Click="Save_MenuItem_Click">
+                    <MenuItem.Header>
+                        <Image Source="Resources/Save.ico" Name="Save_Button" Margin="0,2,0,2" ToolTip="저장" />
+                    </MenuItem.Header>
+                </MenuItem>
                 <MenuItem Name="Export_MenuItem" Click="Export_Menu_Click" Padding="-1">
                     <MenuItem.Header>
                         <Menu>
                             <MenuItem Name="ExportGlyph_MenuItem" SubmenuOpened="ExportGlyph_MenuItem_SubmenuOpened" SubmenuClosed="ExportGlyph_MenuItem_SubmenuClosed">
                                 <MenuItem.Header>
-                                    <StackPanel Orientation="Horizontal" ToolTip="내보내기">
+                                    <StackPanel Orientation="Horizontal" ToolTip="내보내기" Margin="0,0,-5,0">
                                         <Image Height="17" Width="17" Source="Resources/Open.ico" Name="Export_Image" Margin="0,2,0,2" />
                                         <Image Height="10" Width="10" Source="Resources/GlyphDown_16x.png" Name="ExportGlyph_Image" />
                                     </StackPanel>
@@ -41,14 +51,25 @@
                         </Menu>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem Name="Action_MenuItem" Click="Action_Menu_Click">
+                <MenuItem Name="Import_MenuItem" Click="Import_Menu_Click" Padding="-1">
                     <MenuItem.Header>
-                        <Image Source="Resources/Action.ico" Name="Action_Button" Margin="0,2,0,2" ToolTip="실행" />
-                    </MenuItem.Header>
-                </MenuItem>
-                <MenuItem Name="Save_MenuItem" Click="Save_MenuItem_Click">
-                    <MenuItem.Header>
-                        <Image Source="Resources/Save.ico" Name="Save_Button" Margin="0,2,0,2" ToolTip="저장" />
+                        <Menu>
+                            <MenuItem Name="ImportGlyph_MenuItem" SubmenuOpened="ImportGlyph_MenuItem_SubmenuOpened" SubmenuClosed="ImportGlyph_MenuItem_SubmenuClosed">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal" ToolTip="가져오기" Margin="0,0,-5,0">
+                                        <Image Height="17" Width="17" Source="Resources/Open.ico" Name="Import_Image" Margin="0,2,0,2">
+                                            <Image.RenderTransform>
+                                                <RotateTransform Angle="180" CenterX="8" CenterY="9" />
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <Image Height="10" Width="10" Source="Resources/GlyphDown_16x.png" Name="ImportGlyph_Image" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                                <MenuItem Name="ImportCSV_MenuItem" Header="CSV로 가져오기" Click="ImportCSV_MenuItem_Click" />
+                                <MenuItem Name="ImportXLS_MenuItem" Header="XLS로 가져오기" Click="ImportXLS_MenuItem_Click" />
+                                <MenuItem Name="ImportTXT_MenuItem" Header="TXT로 가져오기" Click="ImportTXT_MenuItem_Click" />
+                            </MenuItem>
+                        </Menu>
                     </MenuItem.Header>
                 </MenuItem>
                 <MenuItem Click="Refresh_Menu_Click">

@@ -32,7 +32,7 @@ namespace TestHelper
     {
         XMLFileController xmlController = new XMLFileController();
         WebDriverController webDriverController = new WebDriverController();
-        ExportFileController exportFileController = new ExportFileController();
+        ImportExportFileController importExportFileController = new ImportExportFileController();
         ObservableCollection<InspectionPageInfo> inspectionPageInfoList = null;
         ObservableCollection<GNBPageInfo> gnbPageInfoList = null;
 
@@ -287,17 +287,19 @@ namespace TestHelper
             {
                 case 0:
                     {
-                        Export_MenuItem.Visibility = Visibility.Hidden;
                         Action_MenuItem.Visibility = Visibility.Hidden;
                         Save_MenuItem.Visibility = Visibility.Hidden;
+                        Export_MenuItem.Visibility = Visibility.Hidden;
+                        Import_MenuItem.Visibility = Visibility.Hidden;
                         StatusBarItemChange(Inspection_WebBrowser.Source);
                         break;
                     }
                 case 1:
                     {
-                        Export_MenuItem.Visibility = Visibility.Visible;
                         Action_MenuItem.Visibility = Visibility.Visible;
                         Save_MenuItem.Visibility = Visibility.Visible;
+                        Export_MenuItem.Visibility = Visibility.Visible;
+                        Import_MenuItem.Visibility = Visibility.Visible;
                         GNBChangedStatusBar();
                         break;
                     }
@@ -426,17 +428,47 @@ namespace TestHelper
 
         private void ExportCSV_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            exportFileController.ExportToCSV(gnbPageInfoList);
+            importExportFileController.ExportToCSV(gnbPageInfoList);
         }
 
         private void ExportXLS_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            importExportFileController.ExportToXLS(gnbPageInfoList);
         }
 
         private void ExportTXT_MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            importExportFileController.ExportToTXT(gnbPageInfoList);
+        }
 
+        private void Import_Menu_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ImportGlyph_MenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            ImportGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphUp_16x.png", UriKind.Relative));
+        }
+
+        private void ImportGlyph_MenuItem_SubmenuClosed(object sender, RoutedEventArgs e)
+        {
+            ImportGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphDown_16x.png", UriKind.Relative));
+        }
+
+        private void ImportCSV_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            importExportFileController.ImportToCSV();
+        }
+
+        private void ImportXLS_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            importExportFileController.ImportToXLS();
+        }
+
+        private void ImportTXT_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            importExportFileController.ImportToTXT();
         }
     }
 }
