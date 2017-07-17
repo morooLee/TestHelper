@@ -65,7 +65,11 @@ namespace TestHelper.Windows.Inspection
             {
                 PageName_TextBox.IsReadOnly = false;
                 URL_TextBox.IsReadOnly = false;
-                Date_TextBox.Visibility = Visibility.Hidden;
+                Date_TextBox.IsReadOnly = true;
+                Date_TextBox.Text = "수정할 때는 사용하지 않는 항목입니다.";
+                Date_TextBox.IsEnabled = false;
+                HelpWords_StackPanel.Visibility = Visibility.Hidden;
+                Buttons_StackPanel.Margin = new Thickness(0);
             }
         }
 
@@ -85,6 +89,10 @@ namespace TestHelper.Windows.Inspection
 
                     Close();
                 }
+            }
+            else
+            {
+                Close();
             }
         }
 

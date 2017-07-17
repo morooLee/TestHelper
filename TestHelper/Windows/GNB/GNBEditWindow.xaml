@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestHelper.Windows.GNB"
         mc:Ignorable="d"
-        Title="GNBEditWindow" Height="300" Width="400" Icon="/TestHelper;component/Resources/Sign_Icon.ico" ShowInTaskbar="False" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="GNBEditWindow" Height="200" Width="400" Icon="/TestHelper;component/Resources/Sign_Icon.ico" ShowInTaskbar="False" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid>
         <StackPanel VerticalAlignment="Center" Margin="5,0,5,0">
             <Grid Margin="0,5,0,5" Height="20">
@@ -14,11 +14,14 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Name="Category_Label" Text="카테고리" FontWeight="Bold" VerticalAlignment="Center" />
-                <StackPanel Name="Category_StackPanel" Grid.Column="1" VerticalAlignment="Center">
-                    <Menu Name="Category_Menu" MouseDown="Category_Menu_MouseDown">
-                        <MenuItem Name="Category_MenuItem" Height="20">
+                <StackPanel Name="Category_StackPanel" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
+                    <Menu Name="Category_Menu">
+                        <MenuItem Name="Category_MenuItem" Height="20" SubmenuOpened="Category_MenuItem_SubmenuOpened" SubmenuClosed="Category_MenuItem_SubmenuClosed">
                             <MenuItem.Header>
-                                <TextBlock Name="Category_TextBlock" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Name="Category_TextBlock" />
+                                    <Image Name="CategoryGlyph_Image" Width="12" Height="12" Source="/TestHelper;component/Resources/GlyphDown_16x.png" />
+                                </StackPanel>
                             </MenuItem.Header>
                             <MenuItem Name="Common_MenuItem" Click="Common_MenuItem_Click">
                                 <MenuItem.Header>
@@ -55,9 +58,9 @@
                 <TextBlock Grid.Column="0" Name="URL_Label" Text="URL" FontWeight="Bold" VerticalAlignment="Center" />
                 <TextBox Grid.Column="1" Name="URL_TextBox" VerticalContentAlignment="Center" />
             </Grid>
-            <StackPanel Name="Buttons_StackPanel" Margin="0,10,0,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <StackPanel Name="Buttons_StackPanel" Margin="0,20,0,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
                 <Button Name="Apply_Button" Content="확인" Click="Apply_Button_Click" />
-                <Button Name="Cancel_Button" Margin="10,0,0,0" Content="취소" Click="Cancel_Button_Click" />
+                <Button Name="Cancel_Button" Margin="20,0,0,0" Content="취소" Click="Cancel_Button_Click" />
             </StackPanel>
         </StackPanel>
     </Grid>

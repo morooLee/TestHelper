@@ -24,6 +24,23 @@
                 
             </Menu>
             <Menu Grid.Column="1" HorizontalAlignment="Right">
+                <MenuItem Name="Export_MenuItem" Click="Export_Menu_Click" Padding="-1">
+                    <MenuItem.Header>
+                        <Menu>
+                            <MenuItem Name="ExportGlyph_MenuItem" SubmenuOpened="ExportGlyph_MenuItem_SubmenuOpened" SubmenuClosed="ExportGlyph_MenuItem_SubmenuClosed">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal" ToolTip="내보내기">
+                                        <Image Height="17" Width="17" Source="Resources/Open.ico" Name="Export_Image" Margin="0,2,0,2" />
+                                        <Image Height="10" Width="10" Source="Resources/GlyphDown_16x.png" Name="ExportGlyph_Image" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                                <MenuItem Name="ExportCSV_MenuItem" Header="CSV로 내보내기" Click="ExportCSV_MenuItem_Click" />
+                                <MenuItem Name="ExportXLS_MenuItem" Header="XLS로 내보내기" Click="ExportXLS_MenuItem_Click" />
+                                <MenuItem Name="ExportTXT_MenuItem" Header="TXT로 내보내기" Click="ExportTXT_MenuItem_Click" />
+                            </MenuItem>
+                        </Menu>
+                    </MenuItem.Header>
+                </MenuItem>
                 <MenuItem Name="Action_MenuItem" Click="Action_Menu_Click">
                     <MenuItem.Header>
                         <Image Source="Resources/Action.ico" Name="Action_Button" Margin="0,2,0,2" ToolTip="실행" />

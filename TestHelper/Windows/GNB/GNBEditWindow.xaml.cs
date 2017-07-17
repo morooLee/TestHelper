@@ -74,14 +74,18 @@ namespace TestHelper.Windows.GNB
             else
             {
                 gnbPageInfo.Category = tmp.Category;
-                gnbPageInfo.Name = tmp.Name;
-                gnbPageInfo.Url = tmp.Url;
+                gnbPageInfo.Name = PageName_TextBox.Text;
+                gnbPageInfo.Url = URL_TextBox.Text;
+
+                MessageBox.Show("정상적으로 수정되었습니다.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                Close();
             }
         }
 
         private void Cancel_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show("취소하였습니다.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -103,15 +107,10 @@ namespace TestHelper.Windows.GNB
                 Category_TextBlock.Text = "카테고리를 선택하세요.";
             }
 
-            Category_TextBlock.Width = Category_StackPanel.ActualWidth;
+            //Category_MenuItem.Width = Category_StackPanel.ActualWidth;
 
             PageName_TextBox.Text = tmp.Name;
             URL_TextBox.Text = tmp.Url;
-        }
-
-        private void Category_Menu_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            
         }
 
         private void Common_MenuItem_Click(object sender, RoutedEventArgs e)
@@ -130,6 +129,16 @@ namespace TestHelper.Windows.GNB
         {
             tmp.Category = Category.Mobile;
             Category_TextBlock.Text = "모바일 게임";
+        }
+
+        private void Category_MenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            CategoryGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphUp_16x.png", UriKind.Relative));
+        }
+
+        private void Category_MenuItem_SubmenuClosed(object sender, RoutedEventArgs e)
+        {
+            CategoryGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphDown_16x.png", UriKind.Relative));
         }
     }
 }

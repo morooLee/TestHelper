@@ -32,10 +32,9 @@ namespace TestHelper
     {
         XMLFileController xmlController = new XMLFileController();
         WebDriverController webDriverController = new WebDriverController();
+        ExportFileController exportFileController = new ExportFileController();
         ObservableCollection<InspectionPageInfo> inspectionPageInfoList = null;
         ObservableCollection<GNBPageInfo> gnbPageInfoList = null;
-        bool isOpened_Category_ContextMenu = false;
-        bool isSorted_Category = false;
 
         public MainWindow()
         {
@@ -127,6 +126,9 @@ namespace TestHelper
                     }
                 case 1:
                     {
+                        xmlController.GetGNBList(gnbPageInfoList);
+                        GNBPageInfoList_ListView.ItemsSource = gnbPageInfoList;
+                        Console.WriteLine("Reflash");
                         break;
                     }
             }
@@ -285,6 +287,7 @@ namespace TestHelper
             {
                 case 0:
                     {
+                        Export_MenuItem.Visibility = Visibility.Hidden;
                         Action_MenuItem.Visibility = Visibility.Hidden;
                         Save_MenuItem.Visibility = Visibility.Hidden;
                         StatusBarItemChange(Inspection_WebBrowser.Source);
@@ -292,11 +295,10 @@ namespace TestHelper
                     }
                 case 1:
                     {
+                        Export_MenuItem.Visibility = Visibility.Visible;
                         Action_MenuItem.Visibility = Visibility.Visible;
                         Save_MenuItem.Visibility = Visibility.Visible;
                         GNBChangedStatusBar();
-                        //StatusBarItemChange(GNBPageInfoList_ListView.SelectedItem);
-                        Console.WriteLine("SelectionChanged");
                         break;
                     }
             }
@@ -347,24 +349,23 @@ namespace TestHelper
 
         private void CategoryAll_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            isSorted_Category = false;
+            
 
         }
 
         private void Common_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            isSorted_Category = true;
-            //gnbPageInfoList.ToList().Sort
+            
         }
 
         private void PCOnline_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            isSorted_Category = true;
+            
         }
 
         private void Mobile_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            isSorted_Category = true;
+            
         }
 
         private void GameCode_TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
@@ -406,6 +407,36 @@ namespace TestHelper
         {
             GNBChangedStatusBar();
             e.Handled = true;
+        }
+
+        private void Export_Menu_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExportGlyph_MenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            ExportGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphUp_16x.png", UriKind.Relative));
+        }
+
+        private void ExportGlyph_MenuItem_SubmenuClosed(object sender, RoutedEventArgs e)
+        {
+            ExportGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphDown_16x.png", UriKind.Relative));
+        }
+
+        private void ExportCSV_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            exportFileController.ExportToCSV(gnbPageInfoList);
+        }
+
+        private void ExportXLS_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExportTXT_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -313,7 +313,8 @@ namespace TestHelper.Controllers
 
         public void GetGNBList(ObservableCollection<GNBPageInfo> gnbPageInfoList)
         {
-            ObservableCollection<GNBPageInfo> tmp = new ObservableCollection<GNBPageInfo>();
+            gnbPageInfoList.Clear();
+
             try
             {
                 XmlDocument xmlDoc = new XmlDocument();
