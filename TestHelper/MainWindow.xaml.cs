@@ -458,19 +458,17 @@ namespace TestHelper
 
         private void ImportCSV_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ObservableCollection<GNBPageInfo> tmpList = null;
-            tmpList = importExportFileController.ImportToCSV();
+            importExportFileController.ImportToCSV(gnbPageInfoList);
         }
 
         private void ImportXLS_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            importExportFileController.ImportToXLS();
+            importExportFileController.ImportToXLS(gnbPageInfoList);
         }
 
         private void ImportTXT_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ObservableCollection<GNBPageInfo> tmpList = null;
-            tmpList = importExportFileController.ImportToTXT();
+            importExportFileController.ImportToTXT(gnbPageInfoList);
         }
     }
 }

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using TestHelper.Models;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Data;
+using System.Data.OleDb;
 
 namespace TestHelper.Controllers
 {
@@ -109,70 +111,97 @@ namespace TestHelper.Controllers
         public bool ExportToXLS(ObservableCollection<GNBPageInfo> gnbPageInfoList)
         {
             bool isSucceed = false;
-            Excel.Application excelApp = null;
-            Excel.Workbook workBook = null;
-            Excel.Worksheet workSheet = null;
+            //Excel.Application excelApp = null;
+            //Excel.Workbook workBook = null;
+            //Excel.Worksheet workSheet = null;
 
-            try
+            //try
+            //{
+            //    excelApp = new Excel.Application();
+            //    workBook = excelApp.Workbooks.Add(System.Reflection.Missing.Value);
+            //    workSheet = (Excel.Worksheet)workBook.Worksheets.get_Item(1);
+
+            //    workSheet.Cells[1, 1] = "#";
+            //    workSheet.Cells[1, 2] = "카테고리";
+            //    workSheet.Cells[1, 3] = "페이지명";
+            //    workSheet.Cells[1, 4] = "URL";
+            //    workSheet.Cells[1, 5] = "게임 코드";
+            //    workSheet.Cells[1, 6] = "GNB 유무";
+            //    workSheet.Cells[1, 7] = "PC방 혜택";
+            //    workSheet.Cells[1, 8] = "맞춤 혜택";
+            //    workSheet.Cells[1, 9] = "A2S 수집";
+
+            //    int row = 2;
+
+            //    foreach (GNBPageInfo item in gnbPageInfoList)
+            //    {
+            //        workSheet.Cells[row, 1] = row - 1;
+            //        workSheet.Cells[row, 2] = item.Category;
+            //        workSheet.Cells[row, 3] = item.Name;
+            //        workSheet.Cells[row, 4] = item.Url;
+            //        workSheet.Cells[row, 5] = item.Code;
+            //        workSheet.Cells[row, 6] = item.HasGNB;
+            //        workSheet.Cells[row, 7] = item.IsPCHub;
+            //        workSheet.Cells[row, 8] = item.IsMyBanner;
+            //        workSheet.Cells[row, 9] = item.IsCheckedA2S;
+
+            //        row++;
+            //    }
+
+            //    string fileName = "GNBInfoList" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + @".xls";
+            //    string path = Directory.GetCurrentDirectory() + @"\" + fileName;
+
+            //    workBook.SaveAs(path, Excel.XlFileFormat.xlWorkbookNormal);
+            //    workBook.Close(true);
+            //    excelApp.Quit();
+
+            //    isSucceed = true;
+
+            //    MessageBox.Show("XLS 포맷으로 저장이 완료되었습니다.\r\n" + fileName, "Export To XLS", MessageBoxButton.OK, MessageBoxImage.Information);
+            //}
+            //catch (COMException)
+            //{
+            //    isSucceed = false;
+            //    MessageBox.Show("Excel이 설치되어 있지 않아 파일 생성에 실패했습니다.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
+            //catch (Exception e)
+            //{
+            //    isSucceed = false;
+            //    MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
+            //finally
+            //{
+            //    // Clean up
+            //    ReleaseExcelObject(workSheet);
+            //    ReleaseExcelObject(workBook);
+            //    ReleaseExcelObject(excelApp);
+            //}
+
+            string Excel03ConString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1}; IMEX={2};'";
+            string Excel07ConString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1}; IMEX={2};'";
+            string fileName = "GNBInfoList" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + @".xls";
+            string path = Directory.GetCurrentDirectory() + @"\" + fileName;
+            string fileContents = string.Empty;
+
+            if (Environment.Is64BitOperatingSystem == true)
             {
-                excelApp = new Excel.Application();
-                workBook = excelApp.Workbooks.Add(System.Reflection.Missing.Value);
-                workSheet = (Excel.Worksheet)workBook.Worksheets.get_Item(1);
-                //workBook = excelApp.Workbooks.Add();
-                //workSheet = workBook.Worksheets.get_Item(1) as Excel.Worksheet;
+                fileContents = string.Format(Excel07ConString, path, false, 0);
+            }
+            else
+            {
+                fileContents = string.Format(Excel03ConString, path, false, 0);
+            }
 
-                workSheet.Cells[1, 1] = "#";
-                workSheet.Cells[1, 2] = "카테고리";
-                workSheet.Cells[1, 3] = "페이지명";
-                workSheet.Cells[1, 4] = "URL";
-                workSheet.Cells[1, 5] = "게임 코드";
-                workSheet.Cells[1, 6] = "GNB 유무";
-                workSheet.Cells[1, 7] = "PC방 혜택";
-                workSheet.Cells[1, 8] = "맞춤 혜택";
-                workSheet.Cells[1, 9] = "A2S 수집";
-
-                int row = 2;
-
-                foreach (GNBPageInfo item in gnbPageInfoList)
+            using (OleDbConnection con = new OleDbConnection(fileContents))
+            {
+                using (OleDbCommand cmd = new OleDbCommand())
                 {
-                    workSheet.Cells[row, 1] = row - 1;
-                    workSheet.Cells[row, 2] = item.Category;
-                    workSheet.Cells[row, 3] = item.Name;
-                    workSheet.Cells[row, 4] = item.Url;
-                    workSheet.Cells[row, 5] = item.Code;
-                    workSheet.Cells[row, 6] = item.HasGNB;
-                    workSheet.Cells[row, 7] = item.IsPCHub;
-                    workSheet.Cells[row, 8] = item.IsMyBanner;
-                    workSheet.Cells[row, 9] = item.IsCheckedA2S;
-
-                    row++;
+                    cmd.Connection = con;
+                    con.Open();
+                    DataTable dtExcelSchema = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                    sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                    con.Close();
                 }
-
-                string fileName = "GNBInfoList" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + @".xls";
-                string path = Directory.GetCurrentDirectory() + @"\" + fileName;
-
-                workBook.SaveAs(path, Excel.XlFileFormat.xlWorkbookNormal);
-                workBook.Close(true);
-                excelApp.Quit();
-
-                isSucceed = true;
-            }
-            catch (COMException e)
-            {
-                isSucceed = false;
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception e)
-            {
-                isSucceed = false;
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                // Clean up
-                ReleaseExcelObject(workSheet);
-                ReleaseExcelObject(workBook);
-                ReleaseExcelObject(excelApp);
             }
 
             return isSucceed;
@@ -199,25 +228,17 @@ namespace TestHelper.Controllers
             }
         }
 
-        public ObservableCollection<GNBPageInfo> ImportToCSV()
+        public void ImportToCSV(ObservableCollection<GNBPageInfo> gnbPageInfoList)
         {
-            ObservableCollection<GNBPageInfo> gnbPageInfoList = new ObservableCollection<GNBPageInfo>();
-
             DoImport(gnbPageInfoList, "csv");
-
-            return gnbPageInfoList;
         }
 
-        public ObservableCollection<GNBPageInfo> ImportToTXT()
+        public void ImportToTXT(ObservableCollection<GNBPageInfo> gnbPageInfoList)
         {
-            ObservableCollection<GNBPageInfo> gnbPageInfoList = new ObservableCollection<GNBPageInfo>();
-
             DoImport(gnbPageInfoList, "txt");
-
-            return gnbPageInfoList;
         }
 
-        private ObservableCollection<GNBPageInfo> DoImport(ObservableCollection<GNBPageInfo> gnbPageInfoList, string fileExtension)
+        private void DoImport(ObservableCollection<GNBPageInfo> gnbPageInfoList, string fileExtension)
         {
             string separator = string.Empty;
             string fileName = string.Empty;
@@ -252,7 +273,7 @@ namespace TestHelper.Controllers
                     FileStream fileStream = new FileStream(path, FileMode.Open);
                     StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8, false);
 
-                    string fileContents = null;
+                    string fileContents = string.Empty;
                     string[] list = null;
                     string[] properties = null;
 
@@ -262,10 +283,11 @@ namespace TestHelper.Controllers
                     {
                         list = fileContents.Split('\n');
 
-                        for (int i = 1; i < list.Length; i++)
+                        for (int i = 1; i < list.Length - 1; i++)
                         {
+                            list[i] = list[i].Replace("\r", "");
                             GNBPageInfo tmp = new GNBPageInfo();
-                            properties = list[i].Split(Convert.ToChar(fileExtension));
+                            properties = list[i].Split(Convert.ToChar(separator));
 
                             if (properties[1] == "공통 페이지")
                             {
@@ -299,18 +321,166 @@ namespace TestHelper.Controllers
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(e.Message + e.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-
-            return gnbPageInfoList;
         }
 
-        public ObservableCollection<GNBPageInfo> ImportToXLS()
+        public void ImportToXLS(ObservableCollection<GNBPageInfo> gnbPageInfoList)
         {
-            ObservableCollection<GNBPageInfo> gnbPageInfoList = new ObservableCollection<GNBPageInfo>();
+            string Excel03ConString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1}'";
+            string Excel07ConString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1}'";
+            string fileName = string.Empty;
+            string path = string.Empty;
+            string fileExtension = string.Empty;
+            string fileContents = string.Empty;
+            string sheetName = string.Empty;
 
-            return gnbPageInfoList;
+            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
+            dialog.Title = "XSL로 가져오기";
+            dialog.Filter = "XLS, XLSX (*.xls, *.xlsx) | *.xls;*.xlsx; | 모든 파일 (*.*) | *.*";
+
+            try
+            {
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    fileName = dialog.SafeFileName;
+                    path = dialog.FileName;
+                    fileExtension = Path.GetExtension(path);
+
+                    //switch (fileExtension)
+                    //{
+                    //    case ".xls":    //Excel 97-03
+                    //        {
+                    //            fileContents = string.Format(Excel07ConString, path, false);
+                    //            break;
+                    //        }
+                    //    case ".xlsx":  //Excel 07
+                    //        {
+                    //            fileContents = string.Format(Excel07ConString, path, false);
+                    //            break;
+                    //        }
+                    //}
+
+                    if (Environment.Is64BitOperatingSystem == true)
+                    {
+                        fileContents = string.Format(Excel07ConString, path, false);
+                    }
+                    else
+                    {
+                        fileContents = string.Format(Excel03ConString, path, false);
+                    }
+
+                    using (OleDbConnection con = new OleDbConnection(fileContents))
+                    {
+                        using (OleDbCommand cmd = new OleDbCommand())
+                        {
+                            cmd.Connection = con;
+                            con.Open();
+                            DataTable dtExcelSchema = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                            sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                            con.Close();
+                        }
+                    }
+
+                    using (OleDbConnection con = new OleDbConnection(fileContents))
+                    {
+                        using (OleDbCommand cmd = new OleDbCommand())
+                        {
+                            using (OleDbDataAdapter oda = new OleDbDataAdapter())
+                            {
+                                DataTable dt = new DataTable();
+                                cmd.CommandText = "SELECT * From [" + sheetName + "]";
+                                cmd.Connection = con;
+                                con.Open();
+                                oda.SelectCommand = cmd;
+                                oda.Fill(dt);
+                                con.Close();
+
+                                int columnCount = dt.Columns.Count;
+                                
+                                foreach (DataRow row in dt.Rows)
+                                {
+                                    GNBPageInfo tmp = new GNBPageInfo();
+
+                                    for (int i = 0; i < columnCount; i++)
+                                    {
+                                        switch (i)
+                                        {
+                                            case (1):
+                                                {
+                                                    switch (row.ItemArray[1].ToString())
+                                                    {
+                                                        case ("0"):
+                                                            {
+                                                                tmp.Category = Category.Common;
+                                                                break;
+                                                            }
+                                                        case ("1"):
+                                                            {
+                                                                tmp.Category = Category.PCOnline;
+                                                                break;
+                                                            }
+                                                        case ("2"):
+                                                            {
+                                                                tmp.Category = Category.Mobile;
+                                                                break;
+                                                            }
+
+                                                    }
+                                                    break;
+                                                }
+                                            case (2):
+                                                {
+                                                    tmp.Name = row.ItemArray[2].ToString();
+                                                    break;
+                                                }
+                                            case (3):
+                                                {
+                                                    tmp.Url = row.ItemArray[3].ToString();
+                                                    break;
+                                                }
+                                            case (4):
+                                                {
+                                                    tmp.Code = row.ItemArray[4].ToString();
+                                                    break;
+                                                }
+                                            case (5):
+                                                {
+                                                    tmp.HasGNB = row.ItemArray[5].ToString() == "" ? (bool?)null : Convert.ToBoolean(row.ItemArray[5].ToString());
+                                                    break;
+                                                }
+                                            case (6):
+                                                {
+                                                    tmp.IsPCHub = row.ItemArray[6].ToString() == "" ? (bool?)null : Convert.ToBoolean(row.ItemArray[6].ToString());
+                                                    break;
+                                                }
+                                            case (7):
+                                                {
+                                                    tmp.IsMyBanner = row.ItemArray[7].ToString() == "" ? (bool?)null : Convert.ToBoolean(row.ItemArray[7].ToString());
+                                                    break;
+                                                }
+                                            case (8):
+                                                {
+                                                    tmp.IsCheckedA2S = row.ItemArray[8].ToString() == "" ? (bool?)null : Convert.ToBoolean(row.ItemArray[8].ToString());
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                    
+                                    gnbPageInfoList.Add(tmp);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
