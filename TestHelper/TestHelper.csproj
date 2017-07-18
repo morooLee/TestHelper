@@ -232,6 +232,30 @@
   <ItemGroup>
     <Resource Include="Resources\Open.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Add_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Edit_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\RecursivelyCheckAll_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\RecursivelyUncheckAll_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\CheckBox_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\CheckboxUncheck_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ShutDown_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cancel.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

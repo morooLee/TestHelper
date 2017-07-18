@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Menu Grid.Column="0">
-                
+
             </Menu>
             <Menu Grid.Column="1" HorizontalAlignment="Right">
                 <MenuItem Name="Action_MenuItem" Click="Action_Menu_Click">
@@ -44,9 +44,9 @@
                                         <Image Height="10" Width="10" Source="Resources/GlyphDown_16x.png" Name="ExportGlyph_Image" />
                                     </StackPanel>
                                 </MenuItem.Header>
-                                <MenuItem Name="ExportCSV_MenuItem" Header="CSV로 내보내기" Click="ExportCSV_MenuItem_Click" />
+                                <MenuItem Name="ExportTXT_MenuItem" Header="TXT로 내보내기(탭 구분)" Click="ExportTXT_MenuItem_Click" />
+                                <MenuItem Name="ExportCSV_MenuItem" Header="CSV로 내보내기(콤마 구분)" Click="ExportCSV_MenuItem_Click" />
                                 <MenuItem Name="ExportXLS_MenuItem" Header="XLS로 내보내기" Click="ExportXLS_MenuItem_Click" />
-                                <MenuItem Name="ExportTXT_MenuItem" Header="TXT로 내보내기" Click="ExportTXT_MenuItem_Click" />
                             </MenuItem>
                         </Menu>
                     </MenuItem.Header>
@@ -65,26 +65,26 @@
                                         <Image Height="10" Width="10" Source="Resources/GlyphDown_16x.png" Name="ImportGlyph_Image" />
                                     </StackPanel>
                                 </MenuItem.Header>
-                                <MenuItem Name="ImportCSV_MenuItem" Header="CSV로 가져오기" Click="ImportCSV_MenuItem_Click" />
+                                <MenuItem Name="ImportTXT_MenuItem" Header="TXT로 가져오기(탭 구분)" Click="ImportTXT_MenuItem_Click" />
+                                <MenuItem Name="ImportCSV_MenuItem" Header="CSV로 가져오기(콤마 구분)" Click="ImportCSV_MenuItem_Click" />
                                 <MenuItem Name="ImportXLS_MenuItem" Header="XLS로 가져오기" Click="ImportXLS_MenuItem_Click" />
-                                <MenuItem Name="ImportTXT_MenuItem" Header="TXT로 가져오기" Click="ImportTXT_MenuItem_Click" />
                             </MenuItem>
                         </Menu>
                     </MenuItem.Header>
                 </MenuItem>
                 <MenuItem Click="Refresh_Menu_Click">
-                <MenuItem.Header>
+                    <MenuItem.Header>
                         <Image Source="Resources/Refresh_grey.ico" Name="Refresh_Button" Margin="0,2,0,2" ToolTip="새로고침" />
-                </MenuItem.Header>
-            </MenuItem>
+                    </MenuItem.Header>
+                </MenuItem>
                 <MenuItem Click="Setting_Menu_Click">
-                <MenuItem.Header>
-                    <!--<Button Height="22" Width="22" ToolTip="설정" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}">
+                    <MenuItem.Header>
+                        <!--<Button Height="22" Width="22" ToolTip="설정" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}">
                         <Image Source="Resources/Settings.ico" />
                     </Button>-->
                         <Image Source="Resources/Settings.ico" Name="Setting_Button" Margin="0,2,0,2" ToolTip="설정" />
-                </MenuItem.Header>
-            </MenuItem>
+                    </MenuItem.Header>
+                </MenuItem>
             </Menu>
         </Grid>
         <TabControl Grid.Row="1" Name="Tab_Control" TabStripPlacement="Left" SelectionChanged="Tab_Control_SelectionChanged">
@@ -156,7 +156,6 @@
                         </Style.Triggers>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         <EventSetter Event="MouseDoubleClick" Handler="GNBListItem_MouseDoubleClick"/>
-                        <EventSetter Event="MouseUp" Handler="GNBListItem_MouseUp"/>
                     </Style>
                 </TabItem.Resources>
                 <TabItem.Header>
@@ -164,269 +163,357 @@
                 </TabItem.Header>
                 <TabItem.Content>
                     <Grid>
-                        <ListView Name="GNBPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource GNBListKey}}" ItemContainerStyle="{StaticResource GNBListViewItem}" Loaded="GNBPageInfoList_ListView_Loaded" SelectionChanged="GNBPageInfoList_ListView_SelectionChanged">
-                        <!--<ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>-->
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn>
-                                    <GridViewColumnHeader>
-                                        <CheckBox Name="Header_CheckBox" Checked="Header_CheckBox_Checked" Unchecked="Header_CheckBox_Unchecked" ToolTip="전체 선택/해제"/>
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <CheckBox IsChecked="{Binding Path=IsChecked}" IsThreeState="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Width="35" DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource IndexConverter}}">
-                                    <GridViewColumnHeader>
-                                        <TextBlock Text="#" ToolTip="인덱스" />
-                                    </GridViewColumnHeader>
-                                </GridViewColumn>
-                                <GridViewColumn Width="40">
-                                    <GridViewColumnHeader>
-                                        <TextBlock Text="상태" ToolTip="요청 상태" />
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Name="Status_Image" Width="20" Height="20" ToolTip="{Binding StatusReason}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="835*"/>
+                            <ColumnDefinition Width="81*"/>
+                        </Grid.ColumnDefinitions>
+                        <ListView Name="GNBPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource GNBListKey}}" ItemContainerStyle="{StaticResource GNBListViewItem}" Loaded="GNBPageInfoList_ListView_Loaded" SelectionChanged="GNBPageInfoList_ListView_SelectionChanged" Grid.ColumnSpan="2">
+                            <ListView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="추가하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/Add_16x.png" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="수정하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/Edit_16x.png" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="삭제하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/Cancel.ico" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator/>
+                                    <MenuItem Header="내보내기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/Open.ico" />
+                                        </MenuItem.Icon>
+                                        <MenuItem Header="TXT로 내보내기(탭 구분)" Click="ExportTXT_MenuItem_Click">
+                                        </MenuItem>
+                                        <MenuItem Header="CSV로 내보내기(콤마 구분)" Click="ExportCSV_MenuItem_Click">
+                                        </MenuItem>
+                                        <MenuItem Header="XLS로 내보내기" Click="ExportXLS_MenuItem_Click">
+                                        </MenuItem>
+                                    </MenuItem>
+                                    <MenuItem Header="가져오기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/Open.ico">
+                                                <Image.RenderTransform>
+                                                    <RotateTransform Angle="180" CenterX="8" CenterY="8" />
+                                                </Image.RenderTransform>
+                                            </Image>
+                                        </MenuItem.Icon>
+                                        <MenuItem Header="TXT로 내보내기(탭 구분)" Click="ExportTXT_MenuItem_Click">
+                                        </MenuItem>
+                                        <MenuItem Header="CSV로 내보내기(콤마 구분)" Click="ExportCSV_MenuItem_Click">
+                                        </MenuItem>
+                                        <MenuItem Header="XLS로 내보내기" Click="ExportXLS_MenuItem_Click">
+                                        </MenuItem>
+                                    </MenuItem>
+                                    <Separator/>
+                                    <MenuItem Header="전체 체크하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/RecursivelyCheckAll_16x.png" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="전체 해제하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/RecursivelyUncheckAll_16x.png" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="선택한 항목 체크하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/CheckBox_16x.png" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="선택한 항목 해제하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/CheckboxUncheck_16x.png" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator/>
+                                    <MenuItem Header="실행하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/Action.ico" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="저장하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/Save.ico" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="설정보기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/Settings.ico" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator/>
+                                    <MenuItem Header="종료하기">
+                                        <MenuItem.Icon>
+                                            <Image Source="Resources/ShutDown_16x.png" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </ListView.ContextMenu>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn>
+                                        <GridViewColumnHeader>
+                                            <CheckBox Name="Header_CheckBox" Checked="Header_CheckBox_Checked" Unchecked="Header_CheckBox_Unchecked" ToolTip="전체 선택/해제"/>
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding Path=IsChecked}" IsThreeState="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="35" DisplayMemberBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource IndexConverter}}">
+                                        <GridViewColumnHeader>
+                                            <TextBlock Text="#" ToolTip="인덱스" />
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="40">
+                                        <GridViewColumnHeader>
+                                            <TextBlock Text="상태" ToolTip="요청 상태" />
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Name="Status_Image" Width="20" Height="20" ToolTip="{Binding StatusReason}">
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Status}" Value="True">
+                                                                        <Setter Property="Source" Value="Resources/StatusOK.ico" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Status}" Value="False">
+                                                                        <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
+                                                    <!--<TextBlock Name="Status_TextBlock" Text="{Binding StatusReason}"/>-->
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="100">
+                                        <GridViewColumnHeader Name="Category_Header" MouseUp="Category_Header_MouseUp">
+                                            <GridViewColumnHeader.ContextMenu>
+                                                <ContextMenu Name="Category_ContextMenu" StaysOpen="true" Closed="Category_ContextMenu_Closed" Opened="Category_ContextMenu_Opened">
+                                                    <MenuItem Name="CategoryAll_MenuItem" Header="전체" Click="CategoryAll_MenuItem_Click" />
+                                                    <MenuItem Name="Common_MenuItem" Header="공통 페이지" Click="Common_MenuItem_Click" />
+                                                    <MenuItem Name="PCOnline_MenuItem" Header="온라인 게임" Click="PCOnline_MenuItem_Click" />
+                                                    <MenuItem Name="Mobile_MenuItem" Header="모바일 게임" Click="Mobile_MenuItem_Click" />
+                                                </ContextMenu>
+                                            </GridViewColumnHeader.ContextMenu>
+                                            <TextBlock Name="Category_TextBlock" Text="카테고리 ▼" ToolTip="카테고리" />
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock>
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="ToolTip" Value="{Binding Category}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Category}" Value="Common">
+                                                                    <Setter Property="Text" Value="공통 페이지" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Category}" Value="PCOnline">
+                                                                    <Setter Property="Text" Value="온라인 게임" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Category}" Value="Mobile">
+                                                                    <Setter Property="Text" Value="모바일 게임" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="100">
+                                        <GridViewColumnHeader>
+                                            <TextBlock Text="페이지명" ToolTip="페이지명(게임명)" />
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Name}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="360">
+                                        <GridViewColumnHeader>
+                                            <TextBlock Text="주소" ToolTip="URL" />
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Url}" ToolTip="{Binding Path=Url}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=Url}" Value="">
+                                                                    <Setter Property="ToolTip" Value="비어있음" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn>
+                                        <GridViewColumnHeader>
+                                            <TextBlock Text="페이지 코드" ToolTip="페이지 코드(게임코드)" />
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Name="GameCode_TextBlock" Text="{Binding Path=Code, NotifyOnTargetUpdated=True}" ToolTip="{Binding Path=Code}" TargetUpdated="GameCode_TextBlock_TargetUpdated" Loaded="GameCode_TextBlock_Loaded">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=IsChanged}" Value="true">
+                                                                    <Setter Property="FontWeight" Value="Bold" />
+                                                                    <Setter Property="Foreground" Value="Red" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=IsChanged}" Value="false">
+                                                                    <Setter Property="FontWeight" Value="Normal" />
+                                                                    <Setter Property="Foreground" Value="Black" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn>
+                                        <GridViewColumnHeader>
+                                            <TextBlock Text="GNB 유무" ToolTip="GNB 적용 여부" />
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Name="HasGNB_Image" Width="20" Height="20">
                                                     <Image.Style>
                                                         <Style TargetType="Image">
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Status}" Value="True">
+                                                                <DataTrigger Binding="{Binding Path=HasGNB}" Value="True">
                                                                     <Setter Property="Source" Value="Resources/StatusOK.ico" />
+                                                                    <Setter Property="ToolTip" Value="적용" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding Status}" Value="False">
+                                                                <DataTrigger Binding="{Binding Path=HasGNB}" Value="False">
                                                                     <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
+                                                                    <Setter Property="ToolTip" Value="미 적용" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=HasGNB}" Value="{x:Null}">
+                                                                    <Setter Property="Source" Value="Resources/StatusHelp.ico" />
+                                                                    <Setter Property="ToolTip" Value="알수 없음" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </Image.Style>
                                                 </Image>
-                                                <!--<TextBlock Name="Status_TextBlock" Text="{Binding StatusReason}"/>-->
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Width="100">
-                                    <GridViewColumnHeader Name="Category_Header" MouseUp="Category_Header_MouseUp">
-                                        <GridViewColumnHeader.ContextMenu>
-                                            <ContextMenu Name="Category_ContextMenu" StaysOpen="true" Closed="Category_ContextMenu_Closed" Opened="Category_ContextMenu_Opened">
-                                                <MenuItem Name="CategoryAll_MenuItem" Header="전체" Click="CategoryAll_MenuItem_Click" />
-                                                <MenuItem Name="Common_MenuItem" Header="공통 페이지" Click="Common_MenuItem_Click" />
-                                                <MenuItem Name="PCOnline_MenuItem" Header="온라인 게임" Click="PCOnline_MenuItem_Click" />
-                                                <MenuItem Name="Mobile_MenuItem" Header="모바일 게임" Click="Mobile_MenuItem_Click" />
-                                            </ContextMenu>
-                                        </GridViewColumnHeader.ContextMenu>
-                                        <TextBlock Name="Category_TextBlock" Text="카테고리 ▼" ToolTip="카테고리" />
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock>
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="ToolTip" Value="{Binding Category}" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Category}" Value="Common">
-                                                                <Setter Property="Text" Value="공통 페이지" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Category}" Value="PCOnline">
-                                                                <Setter Property="Text" Value="온라인 게임" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Category}" Value="Mobile">
-                                                                <Setter Property="Text" Value="모바일 게임" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Width="100">
-                                    <GridViewColumnHeader>
-                                        <TextBlock Text="페이지명" ToolTip="페이지명(게임명)" />
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Name}" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Width="360">
-                                    <GridViewColumnHeader>
-                                        <TextBlock Text="주소" ToolTip="URL" />
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Url}" ToolTip="{Binding Path=Url}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Path=Url}" Value="">
-                                                                <Setter Property="ToolTip" Value="비어있음" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn>
-                                    <GridViewColumnHeader>
-                                        <TextBlock Text="페이지 코드" ToolTip="페이지 코드(게임코드)" />
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Name="GameCode_TextBlock" Text="{Binding Path=Code, NotifyOnTargetUpdated=True}" ToolTip="{Binding Path=Code}" TargetUpdated="GameCode_TextBlock_TargetUpdated" Loaded="GameCode_TextBlock_Loaded">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Path=IsChanged}" Value="true">
-                                                                <Setter Property="FontWeight" Value="Bold" />
-                                                                <Setter Property="Foreground" Value="Red" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=IsChanged}" Value="false">
-                                                                <Setter Property="FontWeight" Value="Normal" />
-                                                                <Setter Property="Foreground" Value="Black" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn>
-                                    <GridViewColumnHeader>
-                                        <TextBlock Text="GNB 유무" ToolTip="GNB 적용 여부" />
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Image Name="HasGNB_Image" Width="20" Height="20">
-                                                <Image.Style>
-                                                    <Style TargetType="Image">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Path=HasGNB}" Value="True">
-                                                                <Setter Property="Source" Value="Resources/StatusOK.ico" />
-                                                                <Setter Property="ToolTip" Value="적용" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=HasGNB}" Value="False">
-                                                                <Setter Property="Source" Value="Resources/StatusCriticalError.ico" />
-                                                                <Setter Property="ToolTip" Value="미 적용" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=HasGNB}" Value="{x:Null}">
-                                                                <Setter Property="Source" Value="Resources/StatusHelp.ico" />
-                                                                <Setter Property="ToolTip" Value="알수 없음" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Image.Style>
-                                            </Image>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                    <!--<GridViewColumn.CellTemplate>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                        <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=HasGNB}" ToolTip="{Binding Path=HasGNB}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>-->
-                                </GridViewColumn>
-                                <GridViewColumn>
-                                    <GridViewColumnHeader>
-                                        <TextBlock Text="PC방 혜택" ToolTip="PC방 혜택 사용여부" />
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Image Name="IsPCHub_Image" Width="20" Height="20">
-                                                <Image.Style>
-                                                    <Style TargetType="Image">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Path=IsPCHub}" Value="True">
-                                                                <Setter Property="Source" Value="Resources/Checkmark_32x.png" />
-                                                                <Setter Property="ToolTip" Value="적용" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=IsPCHub}" Value="False">
-                                                                <Setter Property="Source" Value="Resources/StatusOffline_stop.ico" />
-                                                                <Setter Property="ToolTip" Value="미 적용" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=IsPCHub}" Value="{x:Null}">
-                                                                <Setter Property="Source" Value="Resources/Question_32xLG.png" />
-                                                                <Setter Property="ToolTip" Value="알수 없음" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Image.Style>
-                                            </Image>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn>
-                                    <GridViewColumnHeader>
-                                        <TextBlock Text="맞춤 혜택" ToolTip="맞춤 혜택 사용여부" />
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Image Name="IsMyBanner_Image" Width="20" Height="20">
-                                                <Image.Style>
-                                                    <Style TargetType="Image">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Path=IsMyBanner}" Value="True">
-                                                                <Setter Property="Source" Value="Resources/Checkmark_32x.png" />
-                                                                <Setter Property="ToolTip" Value="적용" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=IsMyBanner}" Value="False">
-                                                                <Setter Property="Source" Value="Resources/StatusOffline_stop.ico" />
-                                                                <Setter Property="ToolTip" Value="미 적용" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=IsMyBanner}" Value="{x:Null}">
-                                                                <Setter Property="Source" Value="Resources/Question_32xLG.png" />
-                                                                <Setter Property="ToolTip" Value="알수 없음" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Image.Style>
-                                            </Image>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Width="40">
-                                    <GridViewColumnHeader>
-                                        <TextBlock Text="A2S" ToolTip="A2S 스크립트 적용 여부" />
-                                    </GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Image Name="IsCheckedA2S_Image" Width="20" Height="20">
-                                                <Image.Style>
-                                                    <Style TargetType="Image">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Path=IsCheckedA2S}" Value="True">
-                                                                <Setter Property="Source" Value="Resources/Checkmark_32x.png" />
-                                                                <Setter Property="ToolTip" Value="적용" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=IsCheckedA2S}" Value="False">
-                                                                <Setter Property="Source" Value="Resources/StatusOffline_stop.ico" />
-                                                                <Setter Property="ToolTip" Value="미 적용" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=IsCheckedA2S}" Value="{x:Null}">
-                                                                <Setter Property="Source" Value="Resources/Question_32xLG.png" />
-                                                                <Setter Property="ToolTip" Value="알수 없음" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Image.Style>
-                                            </Image>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                                    </GridViewColumn>
+                                    <GridViewColumn>
+                                        <GridViewColumnHeader>
+                                            <TextBlock Text="PC방 혜택" ToolTip="PC방 혜택 사용여부" />
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Name="IsPCHub_Image" Width="20" Height="20">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=IsPCHub}" Value="True">
+                                                                    <Setter Property="Source" Value="Resources/Checkmark_32x.png" />
+                                                                    <Setter Property="ToolTip" Value="적용" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=IsPCHub}" Value="False">
+                                                                    <Setter Property="Source" Value="Resources/StatusOffline_stop.ico" />
+                                                                    <Setter Property="ToolTip" Value="미 적용" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=IsPCHub}" Value="{x:Null}">
+                                                                    <Setter Property="Source" Value="Resources/Question_32xLG.png" />
+                                                                    <Setter Property="ToolTip" Value="알수 없음" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn>
+                                        <GridViewColumnHeader>
+                                            <TextBlock Text="맞춤 혜택" ToolTip="맞춤 혜택 사용여부" />
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Name="IsMyBanner_Image" Width="20" Height="20">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=IsMyBanner}" Value="True">
+                                                                    <Setter Property="Source" Value="Resources/Checkmark_32x.png" />
+                                                                    <Setter Property="ToolTip" Value="적용" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=IsMyBanner}" Value="False">
+                                                                    <Setter Property="Source" Value="Resources/StatusOffline_stop.ico" />
+                                                                    <Setter Property="ToolTip" Value="미 적용" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=IsMyBanner}" Value="{x:Null}">
+                                                                    <Setter Property="Source" Value="Resources/Question_32xLG.png" />
+                                                                    <Setter Property="ToolTip" Value="알수 없음" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="40">
+                                        <GridViewColumnHeader>
+                                            <TextBlock Text="A2S" ToolTip="A2S 스크립트 적용 여부" />
+                                        </GridViewColumnHeader>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Name="IsCheckedA2S_Image" Width="20" Height="20">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=IsCheckedA2S}" Value="True">
+                                                                    <Setter Property="Source" Value="Resources/Checkmark_32x.png" />
+                                                                    <Setter Property="ToolTip" Value="적용" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=IsCheckedA2S}" Value="False">
+                                                                    <Setter Property="Source" Value="Resources/StatusOffline_stop.ico" />
+                                                                    <Setter Property="ToolTip" Value="미 적용" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=IsCheckedA2S}" Value="{x:Null}">
+                                                                    <Setter Property="Source" Value="Resources/Question_32xLG.png" />
+                                                                    <Setter Property="ToolTip" Value="알수 없음" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </Grid>
                 </TabItem.Content>
             </TabItem>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TestHelper.Windows.Inspection"
         xmlns:model="clr-namespace:TestHelper.Models"
         mc:Ignorable="d"
-        Title="InspectionSettingWindow" Height="300" Width="550" Icon="/TestHelper;component/Resources/Sign_Icon.ico" ShowInTaskbar="False" ResizeMode="CanResize" Loaded="Window_Loaded">
+        Title="수정" Height="300" Width="550" Icon="/TestHelper;component/Resources/Sign_Icon.ico" ShowInTaskbar="False" ResizeMode="CanResize" Loaded="Window_Loaded">
     <Grid>
         <Grid.Resources>
             <model:InspectionPageInfoList x:Key="InspectionListKey" />
