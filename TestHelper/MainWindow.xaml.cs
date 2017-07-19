@@ -52,7 +52,7 @@ namespace TestHelper
 
         }
 
-        private void InspectionPageInfoList_ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Inspection_ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListView listView = sender as ListView;
             InspectionPageInfo item = listView.SelectedItem as InspectionPageInfo;
@@ -82,12 +82,12 @@ namespace TestHelper
 
                 if (doc == null)
                 {
-                    Date_TextBlock.Text = "점검시간 : ";
+                    InspectionDate_TextBlock.Text = "점검시간 : ";
                 }
                 else
                 {
-                    Date_TextBlock.Text = "점검시간 : " + doc.innerText;
-                    InspectionPageInfo item = InspectionPageInfoList_ListView.SelectedItem as InspectionPageInfo;
+                    InspectionDate_TextBlock.Text = "점검시간 : " + doc.innerText;
+                    InspectionPageInfo item = Inspection_ListView.SelectedItem as InspectionPageInfo;
 
                     if (item != null)
                     {
@@ -105,19 +105,19 @@ namespace TestHelper
 
         private void StatusBarItemChange(object obj)
         {
-            if (statusBar.HasItems)
+            if (Common_StatusBar.HasItems)
             {
-                statusBar.Items.RemoveAt(0);
+                Common_StatusBar.Items.RemoveAt(0);
             }
             if (obj != null)
             {
-                statusBar.Items.Add(obj);
+                Common_StatusBar.Items.Add(obj);
             }
         }
 
-        private void Refresh_Menu_Click(object sender, RoutedEventArgs e)
+        private void Common_Refresh_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            switch(Tab_Control.SelectedIndex)
+            switch(Main_TabControl.SelectedIndex)
             {
                 case 0:
                     {
@@ -134,7 +134,7 @@ namespace TestHelper
             }
         }
 
-        private void InspectionPageInfoList_ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void Inspection_ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ListViewItem listViewItem = sender as ListViewItem;
             if (listViewItem.IsSelected)
@@ -147,15 +147,9 @@ namespace TestHelper
             }
         }
 
-        private void Inspection_TabItem_Loaded(object sender, RoutedEventArgs e)
+        private void Common_Setting_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //xmlController.GetInspectionList(inspectionPageInfoList);
-            //InspectionPageInfoList_ListView.ItemsSource = inspectionPageInfoList;
-        }
-
-        private void Setting_Menu_Click(object sender, RoutedEventArgs e)
-        {
-            switch (Tab_Control.SelectedIndex)
+            switch (Main_TabControl.SelectedIndex)
             {
                 case 0:
                     {
@@ -178,12 +172,6 @@ namespace TestHelper
             }
         }
 
-        private void GNB_TabItem_Loaded(object sender, RoutedEventArgs e)
-        {
-            //xmlController.GetGNBList(gnbPageInfoList);
-            //GNBPageInfoList_ListView.ItemsSource = gnbPageInfoList;
-        }
-
         private void GNBPageInfoList_ListView_Loaded(object sender, RoutedEventArgs e)
         {
             if (gnbPageInfoList == null)
@@ -195,18 +183,18 @@ namespace TestHelper
             }
         }
 
-        private void InspectionPageInfoList_ListView_Loaded(object sender, RoutedEventArgs e)
+        private void Inspection_ListView_Loaded(object sender, RoutedEventArgs e)
         {
             if (inspectionPageInfoList == null)
             {
                 inspectionPageInfoList = new ObservableCollection<InspectionPageInfo>();
 
                 xmlController.GetInspectionList(inspectionPageInfoList);
-                InspectionPageInfoList_ListView.ItemsSource = inspectionPageInfoList;
+                Inspection_ListView.ItemsSource = inspectionPageInfoList;
             }
         }
 
-        private void GNBListItem_MouseDoubleClick(object sender, RoutedEventArgs e)
+        private void GNBListViewItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             GNBPageInfo item = ((ListViewItem)sender).DataContext as GNBPageInfo;
             GNBEditWindow gnbEditWindow = new GNBEditWindow(item);
@@ -225,19 +213,19 @@ namespace TestHelper
             }
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void GNB_ListViewItem_CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox ckb = sender as CheckBox;
             GNBPageInfo item = ckb.DataContext as GNBPageInfo;
         }
 
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private void GNB_ListViewItem_CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             CheckBox ckb = sender as CheckBox;
             GNBPageInfo item = ckb.DataContext as GNBPageInfo;
         }
 
-        private void Header_CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void GNB_IsChecked_Header_CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (gnbPageInfoList != null && gnbPageInfoList.Count > 0)
             {
@@ -248,7 +236,7 @@ namespace TestHelper
             }
         }
 
-        private void Header_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private void GNB_IsChecked_Header_CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (gnbPageInfoList != null && gnbPageInfoList.Count > 0)
             {
@@ -259,9 +247,9 @@ namespace TestHelper
             }
         }
 
-        private async void Action_Menu_Click(object sender, RoutedEventArgs e)
+        private async void Common_Action_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            switch (Tab_Control.SelectedIndex)
+            switch (Main_TabControl.SelectedIndex)
             {
                 case 0:
                     {
@@ -281,25 +269,25 @@ namespace TestHelper
             }
         }
 
-        private void Tab_Control_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Main_TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch(Tab_Control.SelectedIndex)
+            switch(Main_TabControl.SelectedIndex)
             {
                 case 0:
                     {
-                        Action_MenuItem.Visibility = Visibility.Hidden;
-                        Save_MenuItem.Visibility = Visibility.Hidden;
-                        Export_MenuItem.Visibility = Visibility.Hidden;
-                        Import_MenuItem.Visibility = Visibility.Hidden;
+                        Common_Action_MenuItem.Visibility = Visibility.Hidden;
+                        Common_Save_MenuItem.Visibility = Visibility.Hidden;
+                        Common_Export_MenuItem.Visibility = Visibility.Hidden;
+                        Common_Import_MenuItem.Visibility = Visibility.Hidden;
                         StatusBarItemChange(Inspection_WebBrowser.Source);
                         break;
                     }
                 case 1:
                     {
-                        Action_MenuItem.Visibility = Visibility.Visible;
-                        Save_MenuItem.Visibility = Visibility.Visible;
-                        Export_MenuItem.Visibility = Visibility.Visible;
-                        Import_MenuItem.Visibility = Visibility.Visible;
+                        Common_Action_MenuItem.Visibility = Visibility.Visible;
+                        Common_Save_MenuItem.Visibility = Visibility.Visible;
+                        Common_Export_MenuItem.Visibility = Visibility.Visible;
+                        Common_Import_MenuItem.Visibility = Visibility.Visible;
                         GNBChangedStatusBar();
                         break;
                     }
@@ -317,7 +305,7 @@ namespace TestHelper
             StatusBarItemChange(status);
         }
 
-        private void Save_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void Common_Save_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             bool isSaved = xmlController.SetGNBList(gnbPageInfoList);
 
@@ -332,21 +320,6 @@ namespace TestHelper
                 }
                 MessageBox.Show("저장되었습니다.", "Save", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-        }
-
-        private void Category_Header_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            Category_ContextMenu.IsOpen = true;
-        }
-
-        private void Category_ContextMenu_Closed(object sender, RoutedEventArgs e)
-        {
-            Category_TextBlock.Text = "카테고리 ▼";
-        }
-
-        private void Category_ContextMenu_Opened(object sender, RoutedEventArgs e)
-        {
-            Category_TextBlock.Text = "카테고리 ▲";
         }
 
         private void CategoryAll_MenuItem_Click(object sender, RoutedEventArgs e)
@@ -370,7 +343,7 @@ namespace TestHelper
             
         }
 
-        private void GameCode_TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
+        private void GNB_GameCode_Item_TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;
             GNBPageInfo gnb = textBlock.DataContext as GNBPageInfo;
@@ -389,7 +362,7 @@ namespace TestHelper
             
         }
 
-        private void GameCode_TextBlock_Loaded(object sender, RoutedEventArgs e)
+        private void GNB_GameCode_Item_TextBlock_Loaded(object sender, RoutedEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;
             
@@ -411,62 +384,52 @@ namespace TestHelper
             e.Handled = true;
         }
 
-        private void Export_Menu_Click(object sender, RoutedEventArgs e)
+        private void Common_Export_SubMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
         {
-
+            Common_ExportGlyphUpDown_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphUp_16x.png", UriKind.Relative));
         }
 
-        private void ExportGlyph_MenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+        private void Common_Export_SubMenuItem_MenuItemSubmenuClosed(object sender, RoutedEventArgs e)
         {
-            ExportGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphUp_16x.png", UriKind.Relative));
+            Common_ExportGlyphUpDown_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphDown_16x.png", UriKind.Relative));
         }
 
-        private void ExportGlyph_MenuItem_SubmenuClosed(object sender, RoutedEventArgs e)
-        {
-            ExportGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphDown_16x.png", UriKind.Relative));
-        }
-
-        private void ExportCSV_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void Common_ExportToCSV_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             importExportFileController.ExportToCSV(gnbPageInfoList);
         }
 
-        private void ExportXLS_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void Common_ExportToXLS_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             importExportFileController.ExportToXLS(gnbPageInfoList);
         }
 
-        private void ExportTXT_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void Common_ExportToTXT_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             importExportFileController.ExportToTXT(gnbPageInfoList);
         }
 
-        private void Import_Menu_Click(object sender, RoutedEventArgs e)
+        private void Common_ImportGlyphUpDown_MenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
         {
-
+            Common_ImportGlyphUpDown_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphUp_16x.png", UriKind.Relative));
         }
 
-        private void ImportGlyph_MenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+        private void Common_ImportGlyphUpDown_MenuItem_SubmenuClosed(object sender, RoutedEventArgs e)
         {
-            ImportGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphUp_16x.png", UriKind.Relative));
+            Common_ImportGlyphUpDown_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphDown_16x.png", UriKind.Relative));
         }
 
-        private void ImportGlyph_MenuItem_SubmenuClosed(object sender, RoutedEventArgs e)
-        {
-            ImportGlyph_Image.Source = new BitmapImage(new Uri(@"/TestHelper;component/Resources/GlyphDown_16x.png", UriKind.Relative));
-        }
-
-        private void ImportCSV_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void Common_ImportToCSV_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             importExportFileController.ImportToCSV(gnbPageInfoList);
         }
 
-        private void ImportXLS_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void Common_ImportToXLS_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             importExportFileController.ImportToXLS(gnbPageInfoList);
         }
 
-        private void ImportTXT_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void Common_ImportToTXT_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             importExportFileController.ImportToTXT(gnbPageInfoList);
         }

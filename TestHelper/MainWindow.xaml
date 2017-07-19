@@ -24,71 +24,71 @@
 
             </Menu>
             <Menu Grid.Column="1" HorizontalAlignment="Right">
-                <MenuItem Name="Action_MenuItem" Click="Action_Menu_Click">
+                <MenuItem Name="Common_Action_MenuItem" Click="Common_Action_MenuItem_Click">
                     <MenuItem.Header>
                         <Image Source="Resources/Action.ico" Name="Action_Button" Margin="0,2,0,2" ToolTip="실행" />
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem Name="Save_MenuItem" Click="Save_MenuItem_Click">
+                <MenuItem Name="Common_Save_MenuItem" Click="Common_Save_MenuItem_Click">
                     <MenuItem.Header>
                         <Image Source="Resources/Save.ico" Name="Save_Button" Margin="0,2,0,2" ToolTip="저장" />
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem Name="Export_MenuItem" Click="Export_Menu_Click" Padding="-1">
+                <MenuItem Name="Common_Export_MenuItem" Padding="-1">
                     <MenuItem.Header>
                         <Menu>
-                            <MenuItem Name="ExportGlyph_MenuItem" SubmenuOpened="ExportGlyph_MenuItem_SubmenuOpened" SubmenuClosed="ExportGlyph_MenuItem_SubmenuClosed">
+                            <MenuItem Name="Common_Export_SubMenuItem" SubmenuOpened="Common_Export_SubMenuItem_SubmenuOpened" SubmenuClosed="Common_Export_SubMenuItem_MenuItemSubmenuClosed">
                                 <MenuItem.Header>
                                     <StackPanel Orientation="Horizontal" ToolTip="내보내기" Margin="0,0,-5,0">
-                                        <Image Height="17" Width="17" Source="Resources/Open.ico" Name="Export_Image" Margin="0,2,0,2" />
-                                        <Image Height="10" Width="10" Source="Resources/GlyphDown_16x.png" Name="ExportGlyph_Image" />
+                                        <Image Name="Common_Export_Image" Height="17" Width="17" Source="Resources/Open.ico" Margin="0,2,0,2" />
+                                        <Image Name="Common_ExportGlyphUpDown_Image" Height="10" Width="10" Source="Resources/GlyphDown_16x.png" />
                                     </StackPanel>
                                 </MenuItem.Header>
-                                <MenuItem Name="ExportTXT_MenuItem" Header="TXT로 내보내기(탭 구분)" Click="ExportTXT_MenuItem_Click" />
-                                <MenuItem Name="ExportCSV_MenuItem" Header="CSV로 내보내기(콤마 구분)" Click="ExportCSV_MenuItem_Click" />
-                                <MenuItem Name="ExportXLS_MenuItem" Header="XLS로 내보내기" Click="ExportXLS_MenuItem_Click" />
+                                <MenuItem Name="Common_ExportToTXT_MenuItem" Header="TXT로 내보내기(탭 구분)" Click="Common_ExportToTXT_MenuItem_Click" />
+                                <MenuItem Name="Common_ExportToCSV_MenuItem" Header="CSV로 내보내기(콤마 구분)" Click="Common_ExportToCSV_MenuItem_Click" />
+                                <MenuItem Name="Common_ExportToXLS_MenuItem" Header="XLS로 내보내기" Click="Common_ExportToXLS_MenuItem_Click" />
                             </MenuItem>
                         </Menu>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem Name="Import_MenuItem" Click="Import_Menu_Click" Padding="-1">
+                <MenuItem Name="Common_Import_MenuItem" Padding="-1">
                     <MenuItem.Header>
                         <Menu>
-                            <MenuItem Name="ImportGlyph_MenuItem" SubmenuOpened="ImportGlyph_MenuItem_SubmenuOpened" SubmenuClosed="ImportGlyph_MenuItem_SubmenuClosed">
+                            <MenuItem Name="Common_ImportGlyphUpDown_MenuItem" SubmenuOpened="Common_ImportGlyphUpDown_MenuItem_SubmenuOpened" SubmenuClosed="Common_ImportGlyphUpDown_MenuItem_SubmenuClosed">
                                 <MenuItem.Header>
                                     <StackPanel Orientation="Horizontal" ToolTip="가져오기" Margin="0,0,-5,0">
-                                        <Image Height="17" Width="17" Source="Resources/Open.ico" Name="Import_Image" Margin="0,2,0,2">
+                                        <Image Name="Import_Image" Height="17" Width="17" Source="Resources/Open.ico" Margin="0,2,0,2">
                                             <Image.RenderTransform>
                                                 <RotateTransform Angle="180" CenterX="8" CenterY="9" />
                                             </Image.RenderTransform>
                                         </Image>
-                                        <Image Height="10" Width="10" Source="Resources/GlyphDown_16x.png" Name="ImportGlyph_Image" />
+                                        <Image Height="10" Width="10" Source="Resources/GlyphDown_16x.png" Name="Common_ImportGlyphUpDown_Image" />
                                     </StackPanel>
                                 </MenuItem.Header>
-                                <MenuItem Name="ImportTXT_MenuItem" Header="TXT로 가져오기(탭 구분)" Click="ImportTXT_MenuItem_Click" />
-                                <MenuItem Name="ImportCSV_MenuItem" Header="CSV로 가져오기(콤마 구분)" Click="ImportCSV_MenuItem_Click" />
-                                <MenuItem Name="ImportXLS_MenuItem" Header="XLS로 가져오기" Click="ImportXLS_MenuItem_Click" />
+                                <MenuItem Name="Common_ImportToTXT_MenuItem" Header="TXT로 가져오기(탭 구분)" Click="Common_ImportToTXT_MenuItem_Click" />
+                                <MenuItem Name="Common_ImportToCSV_MenuItem" Header="CSV로 가져오기(콤마 구분)" Click="Common_ImportToCSV_MenuItem_Click" />
+                                <MenuItem Name="Common_ImportToXLS_MenuItem" Header="XLS로 가져오기" Click="Common_ImportToXLS_MenuItem_Click" />
                             </MenuItem>
                         </Menu>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem Click="Refresh_Menu_Click">
+                <MenuItem Click="Common_Refresh_MenuItem_Click">
                     <MenuItem.Header>
                         <Image Source="Resources/Refresh_grey.ico" Name="Refresh_Button" Margin="0,2,0,2" ToolTip="새로고침" />
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem Click="Setting_Menu_Click">
+                <MenuItem Click="Common_Setting_MenuItem_Click">
                     <MenuItem.Header>
                         <!--<Button Height="22" Width="22" ToolTip="설정" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}">
                         <Image Source="Resources/Settings.ico" />
                     </Button>-->
-                        <Image Source="Resources/Settings.ico" Name="Setting_Button" Margin="0,2,0,2" ToolTip="설정" />
+                        <Image Source="Resources/Settings.ico" Name="Common_Setting_Image" Margin="0,2,0,2" ToolTip="설정" />
                     </MenuItem.Header>
                 </MenuItem>
             </Menu>
         </Grid>
-        <TabControl Grid.Row="1" Name="Tab_Control" TabStripPlacement="Left" SelectionChanged="Tab_Control_SelectionChanged">
-            <TabItem Name="Inspection_TabItem" Loaded="Inspection_TabItem_Loaded">
+        <TabControl Grid.Row="1" Name="Main_TabControl" TabStripPlacement="Left" SelectionChanged="Main_TabControl_SelectionChanged">
+            <TabItem Name="Main_Inspection_TabItem">
                 <TabItem.Header>
                     <TextBlock Text="Inspection" ToolTip="점검" />
                 </TabItem.Header>
@@ -103,14 +103,14 @@
                             <DockPanel.Resources>
                                 <model:InspectionPageInfoList x:Key="InspectionListKey" />
                                 <Style x:Key="ListViewStyle" TargetType="{x:Type ListViewItem}">
-                                    <EventSetter Event="MouseDoubleClick" Handler="InspectionPageInfoList_ListView_MouseDoubleClick" />
+                                    <EventSetter Event="MouseDoubleClick" Handler="Inspection_ListViewItem_MouseDoubleClick" />
                                 </Style>
                             </DockPanel.Resources>
                             <!--<Grid.ColumnDefinitions>
                             <ColumnDefinition Width=""></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>-->
-                            <ListView DockPanel.Dock="Left" Name="InspectionPageInfoList_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="InspectionPageInfoList_ListView_SelectionChanged" Loaded="InspectionPageInfoList_ListView_Loaded" >
+                            <ListView DockPanel.Dock="Left" Name="Inspection_ListView" ItemsSource="{Binding Source={StaticResource InspectionListKey}}" ItemContainerStyle="{StaticResource ListViewStyle}" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="Inspection_ListView_SelectionChanged" Loaded="Inspection_ListView_Loaded" >
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="True">
                                         <GridViewColumn DisplayMemberBinding="{Binding Path=PageName}" Header="Page" />
@@ -125,7 +125,7 @@
                                 </Grid.RowDefinitions>
                                 <DockPanel Grid.Row="0">
                                     <Border DockPanel.Dock="Bottom" BorderThickness="0.5" BorderBrush="#FFACACAC"></Border>
-                                    <TextBlock Name="Date_TextBlock" DockPanel.Dock="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold" />
+                                    <TextBlock Name="InspectionDate_TextBlock" DockPanel.Dock="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold" />
                                     <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
                                     <Button Height="22" Width="22" ToolTip="새로고침" Name="Refresh_Button" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" Click="Refresh_Button_Click">
                                         <Image Source="Resources/Refresh_grey.ico" />
@@ -141,21 +141,13 @@
                     </Grid>
                 </TabItem.Content>
             </TabItem>
-            <TabItem Name="GNB_TabItem" Loaded="GNB_TabItem_Loaded">
+            <TabItem Name="Main_GNB_TabItem">
                 <TabItem.Resources>
                     <model:GNBPageInfoList x:Key="GNBListKey" />
                     <control:IndexConverter x:Key="IndexConverter" />
                     <Style x:Key="GNBListViewItem" TargetType="ListViewItem">
-                        <Style.Triggers>
-                            <!--<DataTrigger Binding="{Binding Category}" Value="PCOnline">
-                                <Setter Property="Text" Value="온라인 게임" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Category}" Value="Mobile">
-                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                            </DataTrigger>-->
-                        </Style.Triggers>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        <EventSetter Event="MouseDoubleClick" Handler="GNBListItem_MouseDoubleClick"/>
+                        <EventSetter Event="MouseDoubleClick" Handler="GNBListViewItem_MouseDoubleClick"/>
                     </Style>
                 </TabItem.Resources>
                 <TabItem.Header>
@@ -190,11 +182,11 @@
                                         <MenuItem.Icon>
                                             <Image Source="Resources/Open.ico" />
                                         </MenuItem.Icon>
-                                        <MenuItem Header="TXT로 내보내기(탭 구분)" Click="ExportTXT_MenuItem_Click">
+                                        <MenuItem Header="TXT로 내보내기(탭 구분)">
                                         </MenuItem>
-                                        <MenuItem Header="CSV로 내보내기(콤마 구분)" Click="ExportCSV_MenuItem_Click">
+                                        <MenuItem Header="CSV로 내보내기(콤마 구분)">
                                         </MenuItem>
-                                        <MenuItem Header="XLS로 내보내기" Click="ExportXLS_MenuItem_Click">
+                                        <MenuItem Header="XLS로 내보내기">
                                         </MenuItem>
                                     </MenuItem>
                                     <MenuItem Header="가져오기">
@@ -205,11 +197,11 @@
                                                 </Image.RenderTransform>
                                             </Image>
                                         </MenuItem.Icon>
-                                        <MenuItem Header="TXT로 내보내기(탭 구분)" Click="ExportTXT_MenuItem_Click">
+                                        <MenuItem Header="TXT로 내보내기(탭 구분)">
                                         </MenuItem>
-                                        <MenuItem Header="CSV로 내보내기(콤마 구분)" Click="ExportCSV_MenuItem_Click">
+                                        <MenuItem Header="CSV로 내보내기(콤마 구분)">
                                         </MenuItem>
-                                        <MenuItem Header="XLS로 내보내기" Click="ExportXLS_MenuItem_Click">
+                                        <MenuItem Header="XLS로 내보내기">
                                         </MenuItem>
                                     </MenuItem>
                                     <Separator/>
@@ -261,11 +253,11 @@
                                 <GridView>
                                     <GridViewColumn>
                                         <GridViewColumnHeader>
-                                            <CheckBox Name="Header_CheckBox" Checked="Header_CheckBox_Checked" Unchecked="Header_CheckBox_Unchecked" ToolTip="전체 선택/해제"/>
+                                            <CheckBox Name="GNB_IsChecked_Header_CheckBox" Checked="GNB_IsChecked_Header_CheckBox_Checked" Unchecked="GNB_IsChecked_Header_CheckBox_Unchecked" ToolTip="전체 선택/해제"/>
                                         </GridViewColumnHeader>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox IsChecked="{Binding Path=IsChecked}" IsThreeState="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                                                <CheckBox IsChecked="{Binding Path=IsChecked}" IsThreeState="False" Checked="GNB_ListViewItem_CheckBox_Checked" Unchecked="GNB_ListViewItem_CheckBox_Unchecked" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -281,7 +273,7 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Name="Status_Image" Width="20" Height="20" ToolTip="{Binding StatusReason}">
+                                                    <Image Name="GNB_Status_Image" Width="20" Height="20" ToolTip="{Binding StatusReason}">
                                                         <Image.Style>
                                                             <Style TargetType="Image">
                                                                 <Style.Triggers>
@@ -301,16 +293,8 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Width="100">
-                                        <GridViewColumnHeader Name="Category_Header" MouseUp="Category_Header_MouseUp">
-                                            <GridViewColumnHeader.ContextMenu>
-                                                <ContextMenu Name="Category_ContextMenu" StaysOpen="true" Closed="Category_ContextMenu_Closed" Opened="Category_ContextMenu_Opened">
-                                                    <MenuItem Name="CategoryAll_MenuItem" Header="전체" Click="CategoryAll_MenuItem_Click" />
-                                                    <MenuItem Name="Common_MenuItem" Header="공통 페이지" Click="Common_MenuItem_Click" />
-                                                    <MenuItem Name="PCOnline_MenuItem" Header="온라인 게임" Click="PCOnline_MenuItem_Click" />
-                                                    <MenuItem Name="Mobile_MenuItem" Header="모바일 게임" Click="Mobile_MenuItem_Click" />
-                                                </ContextMenu>
-                                            </GridViewColumnHeader.ContextMenu>
-                                            <TextBlock Name="Category_TextBlock" Text="카테고리 ▼" ToolTip="카테고리" />
+                                        <GridViewColumnHeader Name="GNB_Category_Header">
+                                            <TextBlock Name="GNB_Category_Header_TextBlock" Text="카테고리 ▼" ToolTip="카테고리" />
                                         </GridViewColumnHeader>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -371,7 +355,7 @@
                                         </GridViewColumnHeader>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Name="GameCode_TextBlock" Text="{Binding Path=Code, NotifyOnTargetUpdated=True}" ToolTip="{Binding Path=Code}" TargetUpdated="GameCode_TextBlock_TargetUpdated" Loaded="GameCode_TextBlock_Loaded">
+                                                <TextBlock Name="GNB_GameCode_Item_TextBlock" Text="{Binding Path=Code, NotifyOnTargetUpdated=True}" ToolTip="{Binding Path=Code}" TargetUpdated="GNB_GameCode_Item_TextBlock_TargetUpdated" Loaded="GNB_GameCode_Item_TextBlock_Loaded">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
                                                             <Style.Triggers>
@@ -396,7 +380,7 @@
                                         </GridViewColumnHeader>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Image Name="HasGNB_Image" Width="20" Height="20">
+                                                <Image Name="GNB_HasGNB_Item_Image" Width="20" Height="20">
                                                     <Image.Style>
                                                         <Style TargetType="Image">
                                                             <Style.Triggers>
@@ -418,11 +402,6 @@
                                                 </Image>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
-                                        <!--<GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=HasGNB}" ToolTip="{Binding Path=HasGNB}" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>-->
                                     </GridViewColumn>
                                     <GridViewColumn>
                                         <GridViewColumnHeader>
@@ -430,7 +409,7 @@
                                         </GridViewColumnHeader>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Image Name="IsPCHub_Image" Width="20" Height="20">
+                                                <Image Name="GNB_IsPCHub_Item_Image" Width="20" Height="20">
                                                     <Image.Style>
                                                         <Style TargetType="Image">
                                                             <Style.Triggers>
@@ -459,7 +438,7 @@
                                         </GridViewColumnHeader>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Image Name="IsMyBanner_Image" Width="20" Height="20">
+                                                <Image Name="GNB_IsMyBanner_Item_Image" Width="20" Height="20">
                                                     <Image.Style>
                                                         <Style TargetType="Image">
                                                             <Style.Triggers>
@@ -488,7 +467,7 @@
                                         </GridViewColumnHeader>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Image Name="IsCheckedA2S_Image" Width="20" Height="20">
+                                                <Image Name="GNB_IsCheckedA2S_Item_Image" Width="20" Height="20">
                                                     <Image.Style>
                                                         <Style TargetType="Image">
                                                             <Style.Triggers>
@@ -518,6 +497,6 @@
                 </TabItem.Content>
             </TabItem>
         </TabControl>
-        <StatusBar Grid.Row="2" Name="statusBar" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
+        <StatusBar Grid.Row="2" Name="Common_StatusBar" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
     </Grid>
 </Window>

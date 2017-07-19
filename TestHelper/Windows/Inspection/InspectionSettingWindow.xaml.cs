@@ -112,7 +112,7 @@ namespace TestHelper.Windows.Inspection
             if(dataContextChanged)
             {
                 xmlController.SetInspectionList(inspectionPageInfoList);
-                ListView lv = Owner.FindName("InspectionPageInfoList_ListView") as ListView;
+                ListView lv = Owner.FindName("Inspection_ListView") as ListView;
                 ObservableCollection<InspectionPageInfo> tmp = lv.Items.SourceCollection as ObservableCollection<InspectionPageInfo>;
 
                 tmp.Clear();
