@@ -1,0 +1,55 @@
+﻿<Window x:Class="TestHelper.Windows.A2S.A2SLogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestHelper.Windows.A2S"
+        xmlns:model="clr-namespace:TestHelper.Models"
+        mc:Ignorable="d"
+        Title="A2SLogWindow" Height="300" Width="300" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.Resources>
+            <model:GNBPageInfoList x:Key="A2SLogList" />
+            <Style x:Key="A2SLogListViewItem" TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <!--<EventSetter Event="MouseDoubleClick" Handler="GNBListViewItem_MouseDoubleClick"/>-->
+            </Style>
+        </Grid.Resources>
+        <ListView Name="A2SLogList_ListView" ItemsSource="{Binding Source={StaticResource A2SLogList}}" ItemContainerStyle="{StaticResource A2SLogListViewItem}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn>
+                        <GridViewColumnHeader>
+                            <TextBlock Text="Action" />
+                        </GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Action}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <GridViewColumnHeader>
+                            <TextBlock Text="Object" />
+                        </GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Object}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <GridViewColumnHeader>
+                            <TextBlock Text="Option" />
+                        </GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Option}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

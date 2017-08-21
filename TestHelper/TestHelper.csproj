@@ -88,6 +88,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -109,7 +110,11 @@
     </ApplicationDefinition>
     <Compile Include="Controllers\ImportExportFileController.cs" />
     <Compile Include="Controllers\IndexConverter.cs" />
+    <Compile Include="Models\A2SLogListViewModel.cs" />
     <Compile Include="Models\GNBPageInfoListViewModel.cs" />
+    <Compile Include="Windows\A2S\A2SLogWindow.xaml.cs">
+      <DependentUpon>A2SLogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\GNB\GNBEditWindow.xaml.cs">
       <DependentUpon>GNBEditWindow.xaml</DependentUpon>
     </Compile>
@@ -133,6 +138,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\A2S\A2SLogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\GNB\GNBEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

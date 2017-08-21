@@ -22,6 +22,9 @@ using TestHelper.Windows.Inspection;
 using System.ComponentModel;
 using System.Globalization;
 using TestHelper.Windows.GNB;
+using TestHelper.Windows.A2S;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace TestHelper
 {
@@ -35,6 +38,8 @@ namespace TestHelper
         ImportExportFileController importExportFileController = new ImportExportFileController();
         ObservableCollection<InspectionPageInfo> inspectionPageInfoList = null;
         ObservableCollection<GNBPageInfo> gnbPageInfoList = null;
+
+        static A2SLogList a2sLogList = new A2SLogList();
 
         public MainWindow()
         {
@@ -432,6 +437,52 @@ namespace TestHelper
         private void Common_ImportToTXT_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             importExportFileController.ImportToTXT(gnbPageInfoList);
+        }
+
+        private void A2S_Url_TextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string url;
+
+                if (A2S_Url_TextBox.Text.StartsWith(@"http://") || A2S_Url_TextBox.Text.StartsWith(@"https://") != true)
+                {
+                    url = @"http://" + A2S_Url_TextBox.Text;
+                }
+                else
+                {
+                    url = A2S_Url_TextBox.Text;
+                }
+
+                A2S_WebBrowser.Navigate(new Uri(url));
+
+                A2SLogWindow a2sLogWindow = new A2SLogWindow(a2sLogList);
+                a2sLogWindow.Owner = Application.Current.MainWindow;
+                a2sLogWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                a2sLogWindow.Show();
+            }
+        }
+
+        private void A2S_WebBrowser_LoadCompleted(object sender, NavigationEventArgs e)
+        {
+            StatusBarItemChange(A2S_WebBrowser.Source);
+
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(A2SCheck);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 200);
+            dispatcherTimer.Start();
+        }
+
+        private void A2SCheck(object sender, EventArgs e)
+        {
+            try
+            {
+                webDriverController.A2SLogCheck(A2S_WebBrowser.Document, a2sLogList);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

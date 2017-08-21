@@ -496,6 +496,21 @@
                     </Grid>
                 </TabItem.Content>
             </TabItem>
+            <TabItem Name="Main_A2S_TabItem">
+                <TabItem.Header>
+                    <TextBlock Text="A2S" ToolTip="A2S 확인" />
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="22"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="0" Name="A2S_Url_TextBox" KeyUp="A2S_Url_TextBox_KeyUp" />
+                        <WebBrowser Grid.Row="1" Name="A2S_WebBrowser" LoadCompleted="A2S_WebBrowser_LoadCompleted" />
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
         </TabControl>
         <StatusBar Grid.Row="2" Name="Common_StatusBar" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
     </Grid>

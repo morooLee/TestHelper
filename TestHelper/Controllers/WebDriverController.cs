@@ -267,5 +267,87 @@ namespace TestHelper.Controllers
 
             return doc;
         }
+
+        public void A2SLogCheck(dynamic obj, A2SLogList a2sLogList)
+        {
+            try
+            {
+                var htmlText = obj.documentElement.InnerHtml;
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(htmlText);
+                HtmlNode head = doc.DocumentNode.SelectNodes("//head").First();
+                HtmlNodeCollection nodeCol = head.SelectNodes("//script");
+                List<string> urlList = new List<string>();
+                //Console.WriteLine(head.OuterHtml);
+
+                foreach (HtmlNode node in nodeCol)
+                {
+                    if (node.Attributes["src"] != null)
+                    {
+                        if (node.Attributes["src"].Value.Contains("act.nhs?_vb=WebLog"))
+                        {
+                            string url = HttpUtility.UrlDecode(node.Attributes["src"].Value);
+                            urlList.Add(url);
+                            
+                        }
+                    }
+                }
+                
+                if (urlList.Count > a2sLogList.Count)
+                {
+                    for (int i = a2sLogList.Count; i < urlList.Count; i++)
+                    {
+                        string[] categories = urlList[i].Split('&');
+                        A2SLog a2sLog = new A2SLog();
+
+                        for (int j = 0; j < categories.Length; j++)
+                        {
+                            switch (j)
+                            {
+                                case 2:
+                                    {
+                                        string[] map = categories[j].Split('=');
+
+                                        if (map.Length == 2)
+                                        {
+                                            a2sLog.Action = map[1];
+                                        }
+
+                                        break;
+                                    }
+                                case 3:
+                                    {
+                                        string[] map = categories[j].Split('=');
+
+                                        if (map.Length == 2)
+                                        {
+                                            a2sLog.Object = map[1];
+                                        }
+
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        string[] map = categories[j].Split('=');
+
+                                        if (map.Length == 2)
+                                        {
+                                            a2sLog.Option = map[1];
+                                        }
+
+                                        break;
+                                    }
+                            }
+                        }
+
+                        a2sLogList.Add(a2sLog);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.GetBaseException(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
